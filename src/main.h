@@ -1,0 +1,4 @@
+#ifndef COMPILADOR_MAIN_H
+#define COMPILADOR_MAIN_H
+
+#endif //COMPILADOR_MAIN_H
