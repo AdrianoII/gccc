@@ -5,3 +5,4 @@ obj/lexParser.o
 CMakeLists.txt
 cmake-build-debug/
 src/a.out
+G.jff
