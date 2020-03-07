@@ -1,6 +1,4 @@
 slides/
-obj/gccc.o
-obj/lexParser.o
 .idea/
 CMakeLists.txt
 cmake-build-debug/
