@@ -18,6 +18,8 @@
 tokenType token;
 
 int lines;
+int col;
+int consumed;
 char* tokenTypesNames[13];
 
 void tokenInit()
@@ -106,7 +108,7 @@ int tryParseToken(char c)
 {
     int parsed = 0;
     //Verifica se tem algo para classificar antes do novo caracter
-    if(c == ',' || c == ';' || c == ':' || c == ' ' || c == '\t' || c == '\n')
+    if(c == ',' || c == ';' || c == ':' || c == ' ' || c == '+' || c == '\t' || c == '\n')
     {
         if(token.size > 0)
         {
@@ -114,13 +116,24 @@ int tryParseToken(char c)
             parsed = 1;
         }
     }
-    else if( c != ' ' && c != '\t' && c != '\n')
+	else if(token.size == 1 && (token.lexVal[0] == ':' || token.lexVal[0] == ',' || token.lexVal[0] == ';' || token.lexVal[0] == '+') && c != '=')
+	{
+		classifyToken();
+		parsed = 1;
+	} else if (token.lexVal[0] == ':' && token.lexVal[1] == '=')
+	{
+		classifyToken();
+		parsed = 1;
+	}
+
+    if( c != ' ' && c != '\t' && c != '\n' && !parsed)
     {
         token.lexVal[token.size++] = c;
     }
     if (c == '\n' && !parsed)
     {
         ++lines;
+        col = 0;
     }
     return parsed;
 }
@@ -128,19 +141,27 @@ int tryParseToken(char c)
 
 int getNextToken(FILE *input)
 {
-    char c = 0;
-    tokenInit();
-    while((c = fgetc(input)) != EOF)
-    {
-        if(tryParseToken(c))
-        {
-            fseek(input,-1,SEEK_CUR);
-            break;
-        }
-    }
-    if(c == EOF)
-    {
-        return 0;
-    }
+	if(consumed)
+	{
+		consumed = 0;
+		char c = 0;
+		tokenInit();
+		while ((c = fgetc(input)) != EOF) {
+			++col;
+			if (lines == 0) {
+				lines = 1;
+			}
+			if (tryParseToken(c)) {
+				fseek(input, -1, SEEK_CUR);
+				break;
+			}
+		}
+		if (c == EOF) {
+			if (token.size > 0) {
+				classifyToken();
+			}
+			return 0;
+		}
+	}
     return  1;
 }
