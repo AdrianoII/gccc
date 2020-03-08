@@ -36,7 +36,7 @@ A gramática G possui a seguinte definição:
 
 - [x] 1. [Faça os grafos sintáticos de cada uma das regras de G.](grafosSintaticos.md) 
 
-- [ ] 2. Implemente um analisador léxico para G.
+- [x] 2. Implemente um analisador léxico para G.
 
      <details>
          <summary>Detalhes:</summary>
@@ -49,7 +49,7 @@ A gramática G possui a seguinte definição:
          </p>
      </details>
 
-- [ ] 3.  Implemente um analisador sintático descendente para analisar cadeias pertencentes à linguagem gerada por G.
+- [x] 3.  Implemente um analisador sintático descendente para analisar cadeias pertencentes à linguagem gerada por G.
 
      <details>
          <summary>Detalhes:</summary>
@@ -65,7 +65,7 @@ A gramática G possui a seguinte definição:
          </p>
      </details>
 
-- [ ] 4. Acrescente, aos grafos sintáticos (parte 1), ações semânticas inserção dos identificadores na tabela de símbolos e de verificação de tipos ( tomar como base slides do material de análise semântica, principalmente o 16).
+- [x] 4. [Acrescente, aos grafos sintáticos (parte 1), ações semânticas inserção dos identificadores na tabela de símbolos e de verificação de tipos ( tomar como base slides do material de análise semântica, principalmente o 16).](grafosSintaticos_sr.md)
 
 - [ ] 5.  Implemente a tabela de símbolos com rotinas de busca e inserção. Acrescente ao analisador sintático as ações semânticas que você definiu de busca e inserção na tabela de símbolos e de verificação de tipos.
 
