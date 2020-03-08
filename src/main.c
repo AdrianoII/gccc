@@ -4,14 +4,20 @@
 
 #include "main.h"
 #include "lexParser.h"
+#include "syntaxParser.h"
 
 /*
  * arg[0] = nome do programa
  * arg[1] = path do arquivo de entrada
  * */
+
+FILE *entrada;
+
 void init()
 {
 	lines = 0;
+	col = 0;
+	consumed = 1;
 	tokenTypesNames[0] = "error";
 	tokenTypesNames[1] = "idle";
 	tokenTypesNames[2] = "var";
@@ -32,17 +38,27 @@ int main(int argc, char *argv[])
 {
     if(argc == 2)
     {
-        FILE *entrada = fopen(argv[1],"r");
+        entrada = fopen(argv[1],"r");
         if(entrada == NULL)
         {
             printf("Path inválido tente novamente!\n");
             return 2;
         }
+        printf("O path inserido é %s\n",argv[1]);
         init();
-        while(getNextToken(entrada))
-        {
-            printToken();
-        }
+//        while(getNextToken(entrada))
+//        {
+//        	consumeToken();
+//            printToken();
+//        }
+//		if(token.size > 0)
+//		{
+//			printToken();
+//		}
+		if(Z())
+		{
+			printf("Parabéns seu programa é aceito pela gramática!\n");
+		}
         printf("Lines = %d\n",lines);
         fclose(entrada);
     }
