@@ -21,6 +21,7 @@ int lines;
 int col;
 int consumed;
 char* tokenTypesNames[13];
+char* tokenClassNames[13];
 
 void tokenInit()
 {
@@ -33,6 +34,31 @@ void tokenInit()
 void printToken()
 {
     printf("Token{\n\tlexval: \"%s\",\n\tsize: %d,\n\ttype: %s\n}\n",token.lexVal,token.size,tokenTypesNames[token.type]);
+}
+
+void initTokenTypesNames()
+{
+	tokenTypesNames[0] = "error";
+	tokenTypesNames[1] = "idle";
+	tokenTypesNames[2] = "var";
+	tokenTypesNames[3] = "colon";
+	tokenTypesNames[4] = "id";
+	tokenTypesNames[5] = "comma";
+	tokenTypesNames[6] = "integer";
+	tokenTypesNames[7] = "real";
+	tokenTypesNames[8] = "semicolon";
+	tokenTypesNames[9] = "assignment";
+	tokenTypesNames[10] = "if";
+	tokenTypesNames[11] = "then";
+	tokenTypesNames[12] = "plus";
+}
+void initTokenClassNames()
+{
+	tokenClassNames[0] = "KEYWORD";
+	tokenClassNames[1] = "SYMBOL";
+	tokenClassNames[2] = "OPERATOR";
+	tokenClassNames[3] = "IDENTIFIER";
+	tokenClassNames[4] = "TYPE";
 }
 
 int isIdentifier()
@@ -58,49 +84,61 @@ void classifyToken()
     if(!strcmp(token.lexVal,"var"))
     {
         token.type = VAR;
+        token.class = KEYWORD;
     }
     else if(!strcmp(token.lexVal,":"))
     {
         token.type = COLON;
+        token.class = SYMBOL;
     }
     else if(!strcmp(token.lexVal,","))
     {
         token.type = COMMA;
+		token.class = SYMBOL;
     }
     else if(!strcmp(token.lexVal,"integer"))
     {
         token.type = INTEGER;
+		token.class = TYPE;
     }
     else if(!strcmp(token.lexVal,"real"))
     {
         token.type = REAL;
+		token.class = TYPE;
     }
     else if(!strcmp(token.lexVal,";"))
     {
         token.type = SEMICOLON;
+		token.class = SYMBOL;
     }
     else if(!strcmp(token.lexVal,":="))
     {
         token.type = ASSIGNMENT;
+		token.class = OPERATOR;
     }
     else if(!strcmp(token.lexVal,"if"))
     {
         token.type = IF;
+		token.class = KEYWORD;
     }
     else if(!strcmp(token.lexVal,"then"))
     {
         token.type = THEN;
+		token.class = KEYWORD;
     }
     else if(!strcmp(token.lexVal,"+"))
     {
         token.type = PLUS;
+		token.class = OPERATOR;
     }
     else if(isIdentifier())
     {
         token.type = ID;
+		token.class = IDENTIFIER;
     }else
 	{
     	token.type = ERROR;
+		token.class = CLASS_ERROR;
     }
 }
 

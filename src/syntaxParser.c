@@ -3,7 +3,7 @@
 
 void syntaxError(tokenClassification expected)
 {
-	printf(RED "%d:%d obtained %s(%s) expected %s\n" RESET,lines,col,token.lexVal,tokenTypesNames[token.type],tokenTypesNames[expected]);
+	printf(RED "ERRO SINTÁTICO: (%d:%d) obtido %s(%s) esperado %s\n" RESET,lines,col,token.lexVal,tokenTypesNames[token.type],tokenTypesNames[expected]);
 }
 
 int Z()
@@ -65,9 +65,19 @@ int L()
 	if(token.type == ID)
 	{
 		consumeToken();
-		if(X())
+		symbolTableItem* idRef = addSymbolTable();
+		if(idRef != NULL)
 		{
-			return 1;
+			addAnalisysQueue(idRef);
+			//printSymbolTable();
+			//printAnalisysQueue();
+			if(X())
+			{
+				return 1;
+			}
+		} else
+		{
+			printf(RED"ERRO SEMÂNTICO: (%d:%d) A VÁRIAVEL %s JÁ FOI DECLARADA ANTERIORMENTE!\n"RESET,lines,col,token.lexVal);
 		}
 	} else
 	{
@@ -101,6 +111,7 @@ int K()
 	if(token.type == INTEGER || token.type == REAL)
 	{
 		consumeToken();
+		addTypeRange();
 		return 1;
 	}
 	else
@@ -136,18 +147,26 @@ int S()
 	if(token.type == ID)
 	{
 		consumeToken();
-		getNextToken(entrada);
-		if(token.type == ASSIGNMENT)
+		symbolTableItem* idRef = lookup(token.lexVal);
+		if(idRef != NULL)
 		{
-			consumeToken();
-			if(E())
+			addAnalisysQueue(idRef);
+			getNextToken(entrada);
+			if(token.type == ASSIGNMENT)
 			{
-				return 1;
+				consumeToken();
+				if(E())
+				{
+					return 1;
+				}
 			}
-		}
-		else
+			else
+			{
+				syntaxError(ASSIGNMENT);
+			}
+		} else
 		{
-			syntaxError(ASSIGNMENT);
+			printf(RED"ERRO SEMÂNTICO: (%d:%d) A VÁRIAVEL %s NÃO FOI DECLARADA!\n"RESET,lines,col,token.lexVal);
 		}
 	}
 	else if(token.type == IF)
@@ -196,7 +215,16 @@ int T()
 	if(token.type == ID)
 	{
 		consumeToken();
-		return  1;
+		symbolTableItem* idRef = lookup(token.lexVal);
+		if(idRef != NULL)
+		{
+			addAnalisysQueue(idRef);
+			return  1;
+		}
+		else
+		{
+			printf(RED"ERRO SEMÂNTICO: (%d:%d) A VÁRIAVEL %s NÃO FOI DECLARADA!\n"RESET,lines,col,token.lexVal);
+		}
 	}
 	else
 	{
@@ -220,6 +248,26 @@ int R()
 		}
 		return 0;
 	}
+	int action = doTypeCoercion();
+	if(action < 0)
+	{
+		printf(RED"ERRO SEMÂNTICO: (%d:%d) EXPRESSÂO NÂO POSSUI ELEMENTOS!\n"RESET,lines,col);
+	}
+	else if(action > 0)
+	{
+		if(action == 1)
+		{
+			printf(YELLOW"AÇÃO SEMÂNTICA: (%d:%d) PRECISA FAZER COERÇÂO PARA INTEGER\n"RESET,lines,col);
+		} else
+		{
+			printf(YELLOW"AÇÃO SEMÂNTICA: (%d:%d) PRECISA FAZER COERÇÂO PARA FLOAT\n"RESET,lines,col);
+		}
+	}
+	else
+	{
+		printf(GREEN"ANÁLISE SEMÂNTICA: (%d:%d) TIPOS DE OPERANDOS IGUAIS\n"RESET,lines,col);
+	}
+
 	//Vazio...
 	return 1;
 }

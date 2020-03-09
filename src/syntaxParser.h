@@ -2,6 +2,7 @@
 #define COMPILADOR_SYNTAXPARSER_H
 
 #include "lexParser.h"
+#include "semanticParser.h"
 #include "main.h"
 
 int Z();

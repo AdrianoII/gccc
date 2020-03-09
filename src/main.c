@@ -5,6 +5,7 @@
 #include "main.h"
 #include "lexParser.h"
 #include "syntaxParser.h"
+#include "semanticParser.h"
 
 /*
  * arg[0] = nome do programa
@@ -18,19 +19,15 @@ void init()
 	lines = 0;
 	col = 0;
 	consumed = 1;
-	tokenTypesNames[0] = "error";
-	tokenTypesNames[1] = "idle";
-	tokenTypesNames[2] = "var";
-	tokenTypesNames[3] = "colon";
-	tokenTypesNames[4] = "id";
-	tokenTypesNames[5] = "comma";
-	tokenTypesNames[6] = "integer";
-	tokenTypesNames[7] = "real";
-	tokenTypesNames[8] = "semicolon";
-	tokenTypesNames[9] = "assignment";
-	tokenTypesNames[10] = "if";
-	tokenTypesNames[11] = "then";
-	tokenTypesNames[12] = "plus";
+
+	initTokenTypesNames();
+	initTokenClassNames();
+	initSemanticClassNames();
+	initSemanticTypeNames();
+	initAnalisysTypeNames();
+
+	initSymbolTable();
+	initSymbolTable();
 }
 
 
@@ -60,6 +57,8 @@ int main(int argc, char *argv[])
 			printf("Parabéns seu programa é aceito pela gramática!\n");
 		}
         printf("Lines = %d\n",lines);
+		printSymbolTable();
+		printAnalisysQueue();
         fclose(entrada);
     }
     else
