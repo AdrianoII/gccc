@@ -55,10 +55,11 @@ void initTokenTypesNames()
 void initTokenClassNames()
 {
 	tokenClassNames[0] = "KEYWORD";
-	tokenClassNames[1] = "SYMBOL";
-	tokenClassNames[2] = "OPERATOR";
-	tokenClassNames[3] = "IDENTIFIER";
-	tokenClassNames[4] = "TYPE";
+	tokenClassNames[1] = "CLASS_IDLE";
+	tokenClassNames[2] = "SYMBOL";
+	tokenClassNames[3] = "OPERATOR";
+	tokenClassNames[4] = "IDENTIFIER";
+	tokenClassNames[5] = "TYPE";
 }
 
 int isIdentifier()

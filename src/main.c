@@ -19,15 +19,17 @@ void init()
 	lines = 0;
 	col = 0;
 	consumed = 1;
+	numTemp = 0;
 
 	initTokenTypesNames();
 	initTokenClassNames();
 	initSemanticClassNames();
 	initSemanticTypeNames();
-	initAnalisysTypeNames();
+	initThreeAddressOpNames();
 
 	initSymbolTable();
 	initSymbolTable();
+	initCode();
 }
 
 
@@ -56,9 +58,10 @@ int main(int argc, char *argv[])
 		{
 			printf("Parabéns seu programa é aceito pela gramática!\n");
 		}
-        printf("Lines = %d\n",lines);
-		printSymbolTable();
-		printAnalisysQueue();
+//      printf("Lines = %d\n",lines);
+// 		printSymbolTable();
+//		printAnalisysQueue();
+		printCode();
         fclose(entrada);
     }
     else

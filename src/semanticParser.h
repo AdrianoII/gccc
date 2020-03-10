@@ -1,17 +1,12 @@
-//
-// Created by adrianoii on 08/03/2020.
-//
-
 #ifndef COMPILADOR_SEMANTICPARSER_H
 #define COMPILADOR_SEMANTICPARSER_H
 
 #include "lexParser.h"
 #include "main.h"
 
-#define TS_INITIAL_SIZE 100
+#define ST_INITIAL_SIZE 100
 
-typedef enum {TARGET,OPERAND} analisysType;
-typedef enum {SEMANTIC_CLASS_EMPTY,SEMANTIC_CLASS_VAR} semanticClass;
+typedef enum {SEMANTIC_CLASS_EMPTY,SEMANTIC_CLASS_VAR,SEMANTIC_CLASS_TEMP,SEMANTIC_CLASS_TAG} semanticClass;
 typedef enum {SEMANTIC_TYPE_EMPTY,SEMANTIC_TYPE_INTEGER,SEMANTIC_TYPE_REAL} semanticType;
 
 typedef struct
@@ -22,6 +17,7 @@ typedef struct
 	tokenClass tokenClass;
 	semanticClass class;
 	semanticType type;
+	int address;
 }symbolTableItem;
 
 typedef struct
@@ -45,19 +41,20 @@ typedef struct
 
 extern symbolTable st;
 extern analisysQueue aq;
-extern char* semanticClassNames[2];
+extern char* semanticClassNames[4];
 extern char* semanticTypeNames[3];
-extern char* analisysTypeNames[2];
+extern int numTemp;
 
 void initSemanticClassNames();
 void initSemanticTypeNames();
-void initAnalisysTypeNames();
 void initSymbolTable();
 void initAnalisysQueue();
 void printSymbolTable();
 void printAnalisysQueue();
 int reallocSymbolTable();
 symbolTableItem* addSymbolTable();
+symbolTableItem* addSymbolTableTag(int tagVal);
+symbolTableItem* addTempSymbolTable();
 void addTypeRange();
 symbolTableItem* lookup(char* lexVal);
 void addAnalisysQueue(symbolTableItem *item);

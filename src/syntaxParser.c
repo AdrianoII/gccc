@@ -144,6 +144,11 @@ int O()
 int S()
 {
 	getNextToken(entrada);
+	nonTerminalType e;
+	e.dir = NULL;
+	e.esq = NULL;
+	e.quadAddress = -1;
+	quadType quad;
 	if(token.type == ID)
 	{
 		consumeToken();
@@ -154,10 +159,16 @@ int S()
 			getNextToken(entrada);
 			if(token.type == ASSIGNMENT)
 			{
+				e.esq = idRef;
 				consumeToken();
-				if(E())
+				if(E(&e))
 				{
-					return 1;
+					quad.operator = THREE_ADDRESS_ASSIGNMENT;
+					quad.result = e.esq;
+					quad.operand1 = e.dir;
+					quad.operand2 = NULL;
+					generateCode(quad);
+						return 1;
 				}
 			}
 			else
@@ -172,14 +183,23 @@ int S()
 	else if(token.type == IF)
 	{
 		consumeToken();
-		if(E())
+		if(E(&e))
 		{
 			getNextToken(entrada);
 			if(token.type == THEN)
 			{
 				consumeToken();
+				nonTerminalType s1;
+				s1.esq = NULL;
+				s1.dir = NULL;
+				s1.quadAddress = code.actualSize++;
 				if(S())
 				{
+					quad.operator = THREE_ADDRESS_JF;
+					quad.result = NULL;
+					quad.operand1 = e.dir;
+					quad.operand2 = addSymbolTableTag(code.actualSize);
+					patch(s1.quadAddress,quad);
 					return 1;
 				}
 			}
@@ -197,19 +217,28 @@ int S()
 	return 0;
 }
 
-int E()
+int E(nonTerminalType *e)
 {
-	if(T())
+	nonTerminalType t;
+	t.esq = NULL;
+	t.dir = NULL;
+	t.quadAddress = -1;
+	if(T(&t))
 	{
-		if(R())
+		nonTerminalType r;
+		r.esq = t.dir;
+		r.dir = NULL;
+		r.quadAddress = -1;
+		if(R(&r))
 		{
+			(*e).dir = r.dir;
 			return 1;
 		}
 	}
 	return 0;
 }
 
-int T()
+int T(nonTerminalType *t)
 {
 	getNextToken(entrada);
 	if(token.type == ID)
@@ -219,6 +248,7 @@ int T()
 		if(idRef != NULL)
 		{
 			addAnalisysQueue(idRef);
+			(*t).dir = idRef;
 			return  1;
 		}
 		else
@@ -233,16 +263,32 @@ int T()
 	return 0;
 }
 
-int R()
+int R(nonTerminalType *r)
 {
+	nonTerminalType r1;
+	r1.esq = NULL;
+	r1.dir = NULL;
+	r1.quadAddress = -1;
 	getNextToken(entrada);
 	if(token.type == PLUS)
 	{
+		nonTerminalType t;
+		t.esq = NULL;
+		t.dir = NULL;
+		t.quadAddress = -1;
 		consumeToken();
-		if(T())
+		if(T(&t))
 		{
-			if(R())
+			r1.esq = t.dir;
+			if(R(&r1))
 			{
+				(*r).dir = addTempSymbolTable();
+				quadType quad;
+				quad.operator = THREE_ADDRESS_PLUS;
+				quad.result = (*r).dir;
+				quad.operand1 = (*r).esq;
+				quad.operand2 = r1.dir;
+				generateCode(quad);
 				return 1;
 			}
 		}
@@ -267,7 +313,7 @@ int R()
 	{
 		printf(GREEN"ANÁLISE SEMÂNTICA: (%d:%d) TIPOS DE OPERANDOS IGUAIS\n"RESET,lines,col);
 	}
-
+	(*r).dir = (*r).esq;
 	//Vazio...
 	return 1;
 }
