@@ -3,7 +3,7 @@
 
 #include "semanticParser.h"
 
-#define CODE_INITIAL_SIZE 100
+#define CODE_INITIAL_SIZE 300
 
 typedef enum{THREE_ADDRESS_EMPTY,THREE_ADDRESS_ASSIGNMENT,THREE_ADDRESS_PLUS,THREE_ADDRESS_JF}threeAddressOp;
 

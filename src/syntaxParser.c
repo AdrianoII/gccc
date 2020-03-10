@@ -53,6 +53,8 @@ int D()
 		}
 		else
 		{
+			syntaxError(COMMA);
+			printf("OR\n");
 			syntaxError(COLON);
 		}
 	}
@@ -206,6 +208,8 @@ int S()
 		}
 	} else
 	{
+		syntaxError(SEMICOLON);
+		printf("OR\n");
 		syntaxError(ID);
 		printf("OR\n");
 		syntaxError(IF);
@@ -227,6 +231,16 @@ int E(nonTerminalType *e)
 		r.quadAddress = -1;
 		if(R(&r))
 		{
+			if(getNextToken())
+			{
+				if(token.type != THEN && token.type != IDLE)
+				{
+					syntaxError(THEN);
+					printf("OR\n");
+					syntaxError(IDLE);
+					return 0;
+				}
+			}
 			(*e).dir = r.dir;
 			return 1;
 		}
@@ -299,10 +313,14 @@ int R(nonTerminalType *r)
 	{
 		if(action == 1)
 		{
-			printf(YELLOW"AÇÃO SEMÂNTICA: (%d:%d) PRECISA FAZER COERÇÂO PARA INTEGER\n"RESET,lines,col);
+			printf(RED"ERRO SEMÂNTICO: (%d:%d) TIPOS DIFERENTES!\n"RESET,lines,col);
+			return 0;
+			//printf(YELLOW"AÇÃO SEMÂNTICA: (%d:%d) PRECISA FAZER COERÇÂO PARA INTEGER\n"RESET,lines,col);
 		} else
 		{
-			printf(YELLOW"AÇÃO SEMÂNTICA: (%d:%d) PRECISA FAZER COERÇÂO PARA FLOAT\n"RESET,lines,col);
+			printf(RED"ERRO SEMÂNTICO: (%d:%d) TIPOS DIFERENTES!\n"RESET,lines,col);
+			return 0;
+			//printf(YELLOW"AÇÃO SEMÂNTICA: (%d:%d) PRECISA FAZER COERÇÂO PARA FLOAT\n"RESET,lines,col);
 		}
 	}
 	else

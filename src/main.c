@@ -58,6 +58,12 @@ int main(int argc, char *argv[])
 			}
 		}
         fclose(entrada);
+		for(int i = 0; i < code.actualSize; i++)
+		{
+			free(code.code[i]);
+		}
+    	free(code.code);
+    	free(st.entries);
     }
     else
     {

@@ -1,4 +1,5 @@
 var
- a, b, c: integer;
- d,e,f:real
-if d+e+f then if b then if d+d+c+c+c then if c+d then if d then if a+d then c:=a
+ a, b, c : integer;
+ d :real
+if a+b+c then
+	if a+b+c+b then if a+b then  if d then a := b
