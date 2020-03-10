@@ -28,6 +28,7 @@ void tokenInit()
     memset(token.lexVal, '\0', 256);
     token.size = 0;
     token.type = IDLE;
+    token.class = CLASS_ERROR;
 }
 
 
@@ -64,7 +65,7 @@ void initTokenClassNames()
 
 int isIdentifier()
 {
-    if(isAlpha(token.lexVal[0]))
+    if(isAlpha(token.lexVal[0]) && token.size > 0)
     {
         if(token.size > 1)
         {

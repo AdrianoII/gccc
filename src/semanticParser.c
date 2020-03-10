@@ -116,7 +116,7 @@ symbolTableItem* lookup(char *lexVal)
 	symbolTableItem* result = NULL;
 	for(int i = 0; i < st.acutalSize; i++)
 	{
-		if(!strcmp(lexVal,st.entries[i].lexVal))
+		if((!strcmp(lexVal,st.entries[i].lexVal)) && st.entries[i].class == SEMANTIC_CLASS_VAR)
 		{
 			result = &st.entries[i];
 			break;
