@@ -2,36 +2,36 @@
 
 ### Z:
 
-![z](grafosSintaticos/z.png)
+![z](grafosSintaticos/initial/z.png)
 
 ### I:
 
-![i](grafosSintaticos/i.png)
+![i](grafosSintaticos/initial/i.png)
 
 ### D:
 
-![d](grafosSintaticos/d.png)
+![d](grafosSintaticos/initial/d.png)
 
 ### L:
-![l](grafosSintaticos/l.png)
+![l](grafosSintaticos/initial/l.png)
 
 ### X:
-![x](grafosSintaticos/x.png)
+![x](grafosSintaticos/initial/x.png)
 
 ### K:
-![k](grafosSintaticos/k.png)
+![k](grafosSintaticos/initial/k.png)
 
 ### O:
-![o](grafosSintaticos/o.png)
+![o](grafosSintaticos/initial/o.png)
 
 ### S:
-![s](grafosSintaticos/s.png)
+![s](grafosSintaticos/initial/s.png)
 
 ### E:
-![e](grafosSintaticos/e.png)
+![e](grafosSintaticos/initial/e.png)
 
 ### R:
-![r](grafosSintaticos/r.png)
+![r](grafosSintaticos/initial/r.png)
 
 ### T:
-![t](grafosSintaticos/t.png)
+![t](grafosSintaticos/initial/t.png)

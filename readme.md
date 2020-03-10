@@ -31,6 +31,8 @@ A gramática G possui a seguinte definição:
   		<ul>
       </p>
   </details>
+  
+* [Grafos sintáticos;](grafosSintaticos_f.md)
 
 ###  TODO:
 
@@ -67,9 +69,9 @@ A gramática G possui a seguinte definição:
 
 - [x] 4. [Acrescente, aos grafos sintáticos (parte 1), ações semânticas inserção dos identificadores na tabela de símbolos e de verificação de tipos ( tomar como base slides do material de análise semântica, principalmente o 16).](grafosSintaticos_sr.md)
 
-- [ ] 5.  Implemente a tabela de símbolos com rotinas de busca e inserção. Acrescente ao analisador sintático as ações semânticas que você definiu de busca e inserção na tabela de símbolos e de verificação de tipos.
+- [x] 5.  Implemente a tabela de símbolos com rotinas de busca e inserção. Acrescente ao analisador sintático as ações semânticas que você definiu de busca e inserção na tabela de símbolos e de verificação de tipos.
 
-- [ ] 6.  Acrescente aos grafos sintáticos e à sua implementação a geração de código intermediário, com regras tais como previstas abaixo:
+- [x] 6.  [Acrescente aos grafos sintáticos e à sua implementação a geração de código intermediário, com regras tais como previstas abaixo:](grafosSintaticos_cg.md)
 
      <details>
          <summary>Detalhes:</summary>
