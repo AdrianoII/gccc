@@ -1,6 +1,8 @@
 #ifndef COMPILADOR_LEXPARSER_H
 #define COMPILADOR_LEXPARSER_H
 
+#include "main.h"
+
 #define consumeToken() consumed = 1
 
 typedef enum{ERROR,IDLE,VAR,COLON,ID,COMMA,INTEGER,REAL,SEMICOLON,ASSIGNMENT,IF,THEN,PLUS} tokenClassification;

@@ -28,14 +28,14 @@ void init()
 	initThreeAddressOpNames();
 
 	initSymbolTable();
-	initSymbolTable();
+	initAnalisysQueue();
 	initCode();
 }
 
 
 int main(int argc, char *argv[])
 {
-    if(argc == 2)
+    if(argc >= 2)
     {
         entrada = fopen(argv[1],"r");
         if(entrada == NULL)
@@ -57,11 +57,15 @@ int main(int argc, char *argv[])
 		if(Z())
 		{
 			printf("Parabéns seu programa é aceito pela gramática!\n");
+			printCode();
+			for(int i = 0; i < argc; i++)
+			{
+				if(!strcmp(argv[i],"-st"))
+				{
+					printSymbolTable();
+				}
+			}
 		}
-//      printf("Lines = %d\n",lines);
-// 		printSymbolTable();
-//		printAnalisysQueue();
-		printCode();
         fclose(entrada);
     }
     else

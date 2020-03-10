@@ -14,9 +14,9 @@ int X();
 int K();
 int O();
 int S();
-int E();
-int R();
-int T();
+int E(nonTerminalType *e);
+int R(nonTerminalType *r);
+int T(nonTerminalType *t);
 
 void syntaxError(tokenClassification expected);
 

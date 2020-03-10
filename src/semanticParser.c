@@ -205,7 +205,9 @@ int doTypeCoercion()
 
 symbolTableItem* addSymbolTableTag(int tagVal)
 {
-	symbolTableItem *result = lookup(token.lexVal);
+	char aux[32];
+	sprintf(aux,"%d",tagVal);
+	symbolTableItem *result = lookup(aux);
 	if(result == NULL)
 	{
 		if (st.acutalSize == st.maxSize)
@@ -219,7 +221,7 @@ symbolTableItem* addSymbolTableTag(int tagVal)
 		st.entries[st.acutalSize].tokenClass = CLASS_IDLE;
 		st.entries[st.acutalSize].address = tagVal;
 		st.entries[st.acutalSize].tokenType = IDLE;
-		sprintf(st.entries[st.acutalSize].lexVal,"%d",tagVal);
+		strcpy(st.entries[st.acutalSize].lexVal,aux);
 		st.entries[st.acutalSize].lexValSize = -1;
 		st.entries[st.acutalSize].class = SEMANTIC_CLASS_TAG;
 		st.entries[st.acutalSize++].type = SEMANTIC_TYPE_EMPTY;

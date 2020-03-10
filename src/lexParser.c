@@ -38,7 +38,7 @@ void printToken()
 
 void initTokenTypesNames()
 {
-	tokenTypesNames[0] = "error";
+	tokenTypesNames[0] = "lexical error";
 	tokenTypesNames[1] = "idle";
 	tokenTypesNames[2] = "var";
 	tokenTypesNames[3] = "colon";
@@ -192,6 +192,11 @@ int getNextToken(FILE *input)
 			}
 			if (tryParseToken(c)) {
 				fseek(input, -1, SEEK_CUR);
+				--col;
+				if(token.type == ERROR)
+				{
+					printf(RED"ERRO LÉXICO: (%d:%d) %s NÃO É RECONHECIDO.\n"RESET, lines, col, token.lexVal);
+				}
 				break;
 			}
 		}
