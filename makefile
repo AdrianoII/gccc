@@ -3,6 +3,9 @@ all: gccc.o
 run: gccc.o
 	./obj/gccc.o in.txt
 
+run-pretty: gccc.o
+	./obj/gccc.o in.txt -st
+
 gccc.o: obj/lexParser.o obj/syntaxParser.o obj/semanticParser.o obj/intermediateCodeGeneration.o
 	gcc  -Wall -Wextra -g src/main.c obj/lexParser.o obj/syntaxParser.o obj/semanticParser.o obj/intermediateCodeGeneration.o -o obj/gccc.o
 

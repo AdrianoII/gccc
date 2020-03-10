@@ -4,10 +4,10 @@
 #include "lexParser.h"
 #include "main.h"
 
-#define ST_INITIAL_SIZE 100
+#define ST_INITIAL_SIZE 300
 
 typedef enum {SEMANTIC_CLASS_EMPTY,SEMANTIC_CLASS_VAR,SEMANTIC_CLASS_TEMP,SEMANTIC_CLASS_TAG} semanticClass;
-typedef enum {SEMANTIC_TYPE_EMPTY,SEMANTIC_TYPE_INTEGER,SEMANTIC_TYPE_REAL} semanticType;
+typedef enum {SEMANTIC_TYPE_EMPTY,SEMANTIC_TYPE_INTEGER,SEMANTIC_TYPE_REAL,SEMANTIC_TYPE_ADDRESS} semanticType;
 
 typedef struct
 {
@@ -17,7 +17,6 @@ typedef struct
 	tokenClass tokenClass;
 	semanticClass class;
 	semanticType type;
-	int address;
 }symbolTableItem;
 
 typedef struct
@@ -42,7 +41,7 @@ typedef struct
 extern symbolTable st;
 extern analisysQueue aq;
 extern char* semanticClassNames[4];
-extern char* semanticTypeNames[3];
+extern char* semanticTypeNames[4];
 extern int numTemp;
 
 void initSemanticClassNames();
@@ -54,7 +53,7 @@ void printAnalisysQueue();
 int reallocSymbolTable();
 symbolTableItem* addSymbolTable();
 symbolTableItem* addSymbolTableTag(int tagVal);
-symbolTableItem* addTempSymbolTable();
+symbolTableItem* addTempSymbolTable(semanticType type);
 void addTypeRange();
 symbolTableItem* lookup(char* lexVal);
 void addAnalisysQueue(symbolTableItem *item);

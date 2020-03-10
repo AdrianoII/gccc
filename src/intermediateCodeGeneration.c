@@ -14,11 +14,6 @@ void initCode()
 
 void initThreeAddressOpNames()
 {
-//	threeAddressOpNames[0] = "THREE_ADDRESS_EMPTY";
-//	threeAddressOpNames[1] = "THREE_ADDRESS_ASSIGNMENT";
-//	threeAddressOpNames[2] = "THREE_ADDRESS_PLUS";
-//	threeAddressOpNames[3] = "THREE_ADDRESS_JF";
-
 	threeAddressOpNames[0] = "-";
 	threeAddressOpNames[1] = ":=";
 	threeAddressOpNames[2] = "+";

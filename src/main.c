@@ -45,15 +45,6 @@ int main(int argc, char *argv[])
         }
         printf("O path inserido é %s\n",argv[1]);
         init();
-//        while(getNextToken(entrada))
-//        {
-//        	consumeToken();
-//            printToken();
-//        }
-//		if(token.size > 0)
-//		{
-//			printToken();
-//		}
 		if(Z())
 		{
 			printf("Parabéns seu programa é aceito pela gramática!\n");

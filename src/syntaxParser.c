@@ -69,8 +69,6 @@ int L()
 		if(idRef != NULL)
 		{
 			addAnalisysQueue(idRef);
-			//printSymbolTable();
-			//printAnalisysQueue();
 			if(X())
 			{
 				return 1;
@@ -101,7 +99,6 @@ int X()
 			return  0;
 		}
 	}
-	//falta o erro de esperar o COMMA
 	return 1;
 }
 
@@ -137,7 +134,6 @@ int O()
 			return 0;
 		}
 	}
-	//Outro caso do vazio
 	return 1;
 }
 
@@ -282,7 +278,7 @@ int R(nonTerminalType *r)
 			r1.esq = t.dir;
 			if(R(&r1))
 			{
-				(*r).dir = addTempSymbolTable();
+				(*r).dir = addTempSymbolTable((*r).esq->type < r1.dir->type ? (*r).esq->type : r1.dir->type);
 				quadType quad;
 				quad.operator = THREE_ADDRESS_PLUS;
 				quad.result = (*r).dir;
@@ -314,6 +310,5 @@ int R(nonTerminalType *r)
 		printf(GREEN"ANÁLISE SEMÂNTICA: (%d:%d) TIPOS DE OPERANDOS IGUAIS\n"RESET,lines,col);
 	}
 	(*r).dir = (*r).esq;
-	//Vazio...
 	return 1;
 }

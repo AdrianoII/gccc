@@ -1,4 +1,4 @@
 var
  a, b, c: integer;
- d:real
-if a then if b then if d+d+c+d+c then if c+c then if d then if a+d then c:=a
+ d,e,f:real
+if d+e+f then if b then if d+d+c+c+c then if c+d then if d then if a+d then c:=a

@@ -7,7 +7,7 @@ int numTemp;
 symbolTable st;
 analisysQueue aq;
 char* semanticClassNames[4];
-char* semanticTypeNames[3];
+char* semanticTypeNames[4];
 
 void initSymbolTable()
 {
@@ -20,8 +20,8 @@ void initSemanticClassNames()
 {
 	semanticClassNames[0] = "SEMANTIC_CLASS_EMPTY";
 	semanticClassNames[1] = "SEMANTIC_CLASS_VAR";
-	semanticClassNames[1] = "SEMANTIC_CLASS_TEMP";
-	semanticClassNames[1] = "SEMANTIC_CLASS_TAG";
+	semanticClassNames[2] = "SEMANTIC_CLASS_TEMP";
+	semanticClassNames[3] = "SEMANTIC_CLASS_TAG";
 }
 
 void initSemanticTypeNames()
@@ -29,6 +29,7 @@ void initSemanticTypeNames()
 	semanticTypeNames[0] = "SEMANTIC_TYPE_EMPTY";
 	semanticTypeNames[1] = "SEMANTIC_TYPE_INTEGER";
 	semanticTypeNames[2] = "SEMANTIC_TYPE_REAL";
+	semanticTypeNames[3] = "SEMANTIC_TYPE_ADDRESS";
 }
 
 void printSymbolTable()
@@ -37,10 +38,10 @@ void printSymbolTable()
 	if(st.acutalSize > 0)
 	{
 		for (int i = 0; i < st.acutalSize; i++) {
-			printf("\n\t {\n\t\tlexVal: %s,\n\t\tlexValSize: %d,\n\t\ttokenClass: %s,\n\t\ttokenType: %s,\n\t\tclass: %s,\n\t\ttype: %s,\n\t\taddress: %d\n\t }",
+			printf("\n\t {\n\t\tlexVal: %s,\n\t\tlexValSize: %d,\n\t\ttokenClass: %s,\n\t\ttokenType: %s,\n\t\tclass: %s,\n\t\ttype: %s,\n\t }",
 				   st.entries[i].lexVal, st.entries[i].lexValSize, tokenClassNames[st.entries[i].tokenClass],
 				   tokenTypesNames[st.entries[i].tokenType], semanticClassNames[st.entries[i].class],
-				   semanticTypeNames[st.entries[i].type],st.entries[i].address);
+				   semanticTypeNames[st.entries[i].type]);
 		}
 	}
 	printf("\n\t]\n}\n");
@@ -53,10 +54,9 @@ void printAnalisysQueue()
 	{
 		for (analisysQueueItem *aux = aq.head; aux != NULL; aux = aux->prox)
 		{
-			printf("\n\t {\n\t\tlexVal: %s,\n\t\tlexValSize: %d,\n\t\ttokenClass: %s,\n\t\ttokenType: %s,\n\t\tclass: %s,\n\t\ttype: %s,\n\t\taddress: %d\n\t }",
-				   aux->item->lexVal, aux->item->lexValSize, tokenClassNames[aux->item->tokenClass],
-				   tokenTypesNames[aux->item->tokenType], semanticClassNames[aux->item->class],
-				   semanticTypeNames[aux->item->type],aux->item->address);
+			printf("\n\t {\n\t\tlexVal: %s,\n\t\tlexValSize: %d,\n\t\ttokenClass: %s,\n\t\ttokenType: %s,\n\t\tclass: %s,\n\t\ttype: %s,\n\t }",
+				   aux->item->lexVal, aux->item->lexValSize, tokenClassNames[aux->item->tokenClass], tokenTypesNames[aux->item->tokenType],
+				   tokenClassNames[aux->item->tokenType], semanticTypeNames[aux->item->class]);
 		}
 	}
 	printf("\n\t]\n}\n");
@@ -64,6 +64,7 @@ void printAnalisysQueue()
 
 int reallocSymbolTable()
 {
+	printf("oi\n");
 	if(realloc(st.entries,st.maxSize + ST_INITIAL_SIZE) == NULL)
 	{
 		printf(RED"Não foi possível alocar mais memória para tabela de símbolos ¯\\_(ツ)_/¯"RESET);
@@ -85,7 +86,6 @@ symbolTableItem* addSymbolTable()
 		}
 		result = &st.entries[st.acutalSize];
 		st.entries[st.acutalSize].tokenClass = token.class;
-		st.entries[st.acutalSize].address = -1;
 		st.entries[st.acutalSize].tokenType = token.type;
 		strcpy(st.entries[st.acutalSize].lexVal, token.lexVal);
 		st.entries[st.acutalSize].lexValSize = token.size;
@@ -182,6 +182,7 @@ int doTypeCoercion()
 			{
 				if(aux->item->type != targetType)
 				{
+
 					if(targetType == SEMANTIC_TYPE_INTEGER)
 					{
 						doCoercion = 1;
@@ -219,17 +220,16 @@ symbolTableItem* addSymbolTableTag(int tagVal)
 		}
 		result = &st.entries[st.acutalSize];
 		st.entries[st.acutalSize].tokenClass = CLASS_IDLE;
-		st.entries[st.acutalSize].address = tagVal;
 		st.entries[st.acutalSize].tokenType = IDLE;
 		strcpy(st.entries[st.acutalSize].lexVal,aux);
-		st.entries[st.acutalSize].lexValSize = -1;
+		st.entries[st.acutalSize].lexValSize = strlen(st.entries[st.acutalSize].lexVal);
 		st.entries[st.acutalSize].class = SEMANTIC_CLASS_TAG;
-		st.entries[st.acutalSize++].type = SEMANTIC_TYPE_EMPTY;
+		st.entries[st.acutalSize++].type = SEMANTIC_TYPE_ADDRESS;
 	}
 	return result;
 }
 
-symbolTableItem* addTempSymbolTable()
+symbolTableItem* addTempSymbolTable(semanticType type)
 {
 	if (st.acutalSize == st.maxSize)
 	{
@@ -240,13 +240,11 @@ symbolTableItem* addTempSymbolTable()
 	}
 	symbolTableItem* result = &st.entries[st.acutalSize];
 	st.entries[st.acutalSize].tokenClass = CLASS_IDLE;
-	st.entries[st.acutalSize].address = -1;
 	st.entries[st.acutalSize].tokenType = IDLE;
 	//Seta o nome da entrada para t%d
 	sprintf(st.entries[st.acutalSize].lexVal,"t%d",numTemp++);
-	st.entries[st.acutalSize].lexValSize = -1;
+	st.entries[st.acutalSize].lexValSize = strlen(st.entries[st.acutalSize].lexVal);
 	st.entries[st.acutalSize].class = SEMANTIC_CLASS_TEMP;
-	//Setar na hora de coercao
-	st.entries[st.acutalSize++].type = SEMANTIC_TYPE_EMPTY;
+	st.entries[st.acutalSize++].type = type;
 	return result;
 }
