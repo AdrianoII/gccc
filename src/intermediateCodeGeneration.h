@@ -3,7 +3,7 @@
 
 #include "semanticParser.h"
 
-#define CODE_INITIAL_SIZE 300
+#define CODE_SIZE 256
 
 typedef enum{THREE_ADDRESS_EMPTY,THREE_ADDRESS_ASSIGNMENT,THREE_ADDRESS_PLUS,THREE_ADDRESS_JF}threeAddressOp;
 
@@ -15,11 +15,17 @@ typedef struct
 	symbolTableItem* result;
 }quadType;
 
+typedef struct codeLineStruct
+{
+	char code[256];
+	int line;
+	struct codeLineStruct* prox;
+} codeLineType;
+
 typedef struct
 {
-	char** code;
+	codeLineType* head;
 	int actualSize;
-	int maxSize;
 }codeType;
 
 typedef struct
@@ -30,14 +36,16 @@ typedef struct
 }nonTerminalType;
 
 extern char* threeAddressOpNames[4];
-extern codeType code;
+extern codeType intemediateCode;
 
 void initCode();
 void initThreeAddressOpNames();
-int codeRealloc();
+int generateEmptyCodeLine();
 void generateCode(quadType quad);
 char* generateThreeAddresCode(quadType quad);
 void patch(int hole,quadType fill);
 void printCode();
+void initIntermediateCodeGeneration();
+void terminateIntermediateCodeGeneration();
 
 #endif //COMPILADOR_INTERMEDIATECODEGENERATION_H

@@ -159,44 +159,36 @@ void addAnalysisQueue(symbolTableItem *item)
 }
 
 /*
- * -1 = Erro não tem elementos
- * 0 = Não faz coerção
- * 1 = float to int
- * 2 = int to float
+ * 0 -> tipos diferentes
+ * 1 -> tipos iguais
  * */
-int doTypeCoercion()
-{
-	if(aq.size > 0)
-	{
-		int doCoercion = 0;
-		semanticType targetType = aq.head->item->type;
-		analysisQueueItem *aux = NULL;
-		if(aq.head->prox != NULL)
-		{
-			for(aux = aq.head->prox; aux != NULL; aux = aux->prox)
-			{
-				if(aux->item->type != targetType)
-				{
 
-					if(targetType == SEMANTIC_TYPE_INTEGER)
-					{
-						doCoercion = 1;
-					} else
-					{
-						doCoercion = 2;
-					}
-					break;
-				}
+int doTypeCheck()
+{
+	int isTypeEquals = 1;
+	if(aq.head->prox != NULL)
+	{
+		analysisQueueItem *aux = NULL;
+		for(aux = aq.head->prox; aux != NULL; aux = aux->prox)
+		{
+			if(aux->item->type != aq.head->item->type)
+			{
+				isTypeEquals = 0;
+				printf(RED"ERRO SEMÂNTICO: (%d:%d) TIPOS DE %s(%s) E %s(%s) SÃO DIFERENTES!\n"RESET,lines,col,aq.head->item->val,semanticTypeNames[aq.head->item->type],aux->item->val,semanticTypeNames[aux->item->type]);
+				break;
 			}
 		}
-		cleanAnalysisQueue();
-		return doCoercion;
+		if(isTypeEquals)
+		{
+			printf(GREEN"ANÁLISE SEMÂNTICA: (%d:%d) TIPOS SÃO IGUAIS!\n"RESET,lines,col);
+		}
 	}
 	else
 	{
 		printf(RED"A analysis queue está vazia!\n"RESET);
 	}
-	return -1;
+	cleanAnalysisQueue();
+	return isTypeEquals;
 }
 
 symbolTableItem* addSymbolTableTag(int tagVal)
@@ -223,8 +215,9 @@ symbolTableItem* addSymbolTableTag(int tagVal)
 			aux->prox = new;
 		}
 		++st.actualSize;
+		return new;
 	}
-	return new;
+	return result;
 }
 
 symbolTableItem* addTempSymbolTable(semanticType type)

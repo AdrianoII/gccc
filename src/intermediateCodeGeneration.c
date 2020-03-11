@@ -1,15 +1,15 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "intermediateCodeGeneration.h"
 
 char* threeAddressOpNames[4];
-codeType code;
+codeType intemediateCode;
 
 void initCode()
 {
-	code.code = calloc(CODE_INITIAL_SIZE,sizeof(char*));
-	code.actualSize = 0;
-	code.maxSize = CODE_INITIAL_SIZE;
+	intemediateCode.head = NULL;
+	intemediateCode.actualSize = 0;
 }
 
 void initThreeAddressOpNames()
@@ -20,50 +20,104 @@ void initThreeAddressOpNames()
 	threeAddressOpNames[3] = "JF";
 }
 
-int codeRealloc()
+void insertCode(char* codeLine, int pos)
 {
-	if(code.actualSize == code.maxSize)
+	codeLineType *aux = intemediateCode.head;
+	if(aux != NULL)
 	{
-		code.code = realloc(code.code, 2*code.maxSize);
-		if(code.code == NULL)
+		while(aux->line != pos && aux->prox != NULL)
 		{
-			printf(RED"Não foi possível alocar mais memória para a geração de código intermediário ¯\\_(ツ)_/¯"RESET);
-			return 0;
+				aux = aux->prox;
 		}
-		code.maxSize *= 2;
+		if(aux->line == pos)
+		{
+			strcpy(aux->code,codeLine);
+		}
+		else
+		{
+			codeLineType *new = calloc(1, sizeof(codeLineType));
+			strcpy(new->code,codeLine);
+			new->line = pos;
+			new->prox = NULL;
+			new->prox = aux->prox;
+			aux->prox = new;
+		}
 	}
-	return 1;
+	else
+	{
+		codeLineType *new = calloc(1, sizeof(codeLineType));
+		strcpy(new->code,codeLine);
+		new->line = pos;
+		new->prox = NULL;
+		intemediateCode.head = new;
+	};
+	free(codeLine);
 }
+
 void generateCode(quadType quad)
 {
-	if(code.actualSize == code.maxSize)
-	{
-		if(!codeRealloc())
-		{
-			return;
-		}
-	}
 	char* newCode = generateThreeAddresCode(quad);
-	code.code[code.actualSize++] = newCode;
+	insertCode(newCode,intemediateCode.actualSize++);
 }
 char* generateThreeAddresCode(quadType quad)
 {
-	char* result = calloc(32,sizeof(char));
+	char* result = calloc(256,sizeof(char));
 	sprintf(result, "[%s %s %s %s]", threeAddressOpNames[quad.operator], (quad.operand1 == NULL ? "-" : quad.operand1->val), (quad.operand2 == NULL ? "-" : quad.operand2->val), (quad.result == NULL ? "-" : quad.result->val));
 	return result;
 }
 
 void patch(int hole,quadType fill)
 {
-	code.code[hole] = generateThreeAddresCode(fill);
+	insertCode(generateThreeAddresCode(fill),hole);
 }
 
 void printCode()
 {
 	printf("Label [Operador Operando1 Operando2 Resultado]\n");
-	for(int i = 0; i < code.actualSize; i++)
+	for(codeLineType* i = intemediateCode.head; i != NULL; i = i->prox)
 	{
-		printf("%d : %s\n",i,code.code[i]);
+		printf("%d : %s\n",i->line,i->code);
 	}
-	printf("%d : [...]\n",code.actualSize);
+	printf("%d : [...]\n",intemediateCode.actualSize);
+}
+
+int generateEmptyCodeLine()
+{
+	quadType quad;
+	quad.operator = THREE_ADDRESS_EMPTY;
+	quad.operand1 = NULL;
+	quad.operand2 = NULL;
+	quad.result =  NULL;
+	int pos = intemediateCode.actualSize;
+	generateCode(quad);
+	return pos;
+}
+void initIntermediateCodeGeneration()
+{
+	initThreeAddressOpNames();
+	initCode();
+}
+
+void terminateCode()
+{
+	codeLineType *atual = intemediateCode.head;
+	if(atual != NULL)
+	{
+		codeLineType *prox = intemediateCode.head->prox;
+		if(prox != NULL)
+		{
+			while(prox != NULL)
+			{
+				free(atual);
+				atual = prox;
+				prox = prox->prox;
+			}
+		}
+	}
+	free(atual);
+}
+
+void terminateIntermediateCodeGeneration()
+{
+	terminateCode();
 }

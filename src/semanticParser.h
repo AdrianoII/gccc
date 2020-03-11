@@ -4,7 +4,7 @@
 #include "lexParser.h"
 #include "main.h"
 
-#define ST_VAL_SIZE 256
+#define ST_VAL_SIZE 32
 
 typedef enum {SEMANTIC_CLASS_EMPTY,SEMANTIC_CLASS_VAR,SEMANTIC_CLASS_TEMP,SEMANTIC_CLASS_TAG} semanticClass;
 typedef enum {SEMANTIC_TYPE_EMPTY,SEMANTIC_TYPE_INTEGER,SEMANTIC_TYPE_REAL,SEMANTIC_TYPE_ADDRESS} semanticType;
@@ -52,7 +52,7 @@ symbolTableItem* addTempSymbolTable(semanticType type);
 void addTypeRange();
 symbolTableItem* lookup(char* lexVal,semanticClass class);
 void addAnalysisQueue(symbolTableItem *item);
-int doTypeCoercion();
+int doTypeCheck();
 void terminateSemanticParser();
 
 #endif //COMPILADOR_SEMANTICPARSER_H

@@ -183,7 +183,7 @@ int S()
 					quad.operand1 = e.dir;
 					quad.operand2 = NULL;
 					generateCode(quad);
-						return 1;
+					return 1;
 				}
 			}
 			else
@@ -207,13 +207,13 @@ int S()
 				nonTerminalType s1;
 				s1.esq = NULL;
 				s1.dir = NULL;
-				s1.quadAddress = code.actualSize++;
+				s1.quadAddress = generateEmptyCodeLine();
 				if(S())
 				{
 					quad.operator = THREE_ADDRESS_JF;
 					quad.result = NULL;
 					quad.operand1 = e.dir;
-					quad.operand2 = addSymbolTableTag(code.actualSize);
+					quad.operand2 = addSymbolTableTag(intemediateCode.actualSize);
 					patch(s1.quadAddress,quad);
 					return 1;
 				}
@@ -321,29 +321,10 @@ int R(nonTerminalType *r)
 		}
 		return 0;
 	}
-	int action = doTypeCoercion();
-	if(action < 0)
+	if(doTypeCheck())
 	{
-		printf(RED"ERRO SEMÂNTICO: (%d:%d) EXPRESSÂO NÂO POSSUI ELEMENTOS!\n"RESET,lines,col);
+		(*r).dir = (*r).esq;
+		return 1;
 	}
-	else if(action > 0)
-	{
-		if(action == 1)
-		{
-			printf(RED"ERRO SEMÂNTICO: (%d:%d) TIPOS DIFERENTES!\n"RESET,lines,col);
-			return 0;
-			//printf(YELLOW"AÇÃO SEMÂNTICA: (%d:%d) PRECISA FAZER COERÇÂO PARA INTEGER\n"RESET,lines,col);
-		} else
-		{
-			printf(RED"ERRO SEMÂNTICO: (%d:%d) TIPOS DIFERENTES!\n"RESET,lines,col);
-			return 0;
-			//printf(YELLOW"AÇÃO SEMÂNTICA: (%d:%d) PRECISA FAZER COERÇÂO PARA FLOAT\n"RESET,lines,col);
-		}
-	}
-	else
-	{
-		printf(GREEN"ANÁLISE SEMÂNTICA: (%d:%d) TIPOS DE OPERANDOS IGUAIS\n"RESET,lines,col);
-	}
-	(*r).dir = (*r).esq;
-	return 1;
+	return 0;
 }
