@@ -16,8 +16,6 @@ FILE *entrada;
 
 void init()
 {
-	numTemp = 0;
-
 	initLexParser();
 
 	initSemanticParser();

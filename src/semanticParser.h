@@ -24,6 +24,7 @@ typedef struct
 	symbolTableItem *entries;
 	int actualSize;
 	int maxSize;
+	int numTemp;
 }symbolTable;
 
 typedef struct analysisQueueItem
@@ -42,7 +43,6 @@ extern symbolTable st;
 extern analysisQueue aq;
 extern char* semanticClassNames[4];
 extern char* semanticTypeNames[4];
-extern int numTemp;
 
 void initSemanticParser();
 void printSymbolTable();

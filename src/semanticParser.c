@@ -3,7 +3,6 @@
 #include <string.h>
 #include "semanticParser.h"
 
-int numTemp;
 symbolTable st;
 analysisQueue aq;
 char* semanticClassNames[4];
@@ -12,6 +11,7 @@ char* semanticTypeNames[4];
 void initSymbolTable()
 {
 	st.actualSize = 0;
+	st.numTemp = 0;
 	st.maxSize = ST_INITIAL_SIZE;
 	st.entries = malloc(sizeof(symbolTableItem) * ST_INITIAL_SIZE);
 }
@@ -238,8 +238,8 @@ symbolTableItem* addTempSymbolTable(semanticType type)
 	}
 	symbolTableItem* result = &st.entries[st.actualSize];
 	st.entries[st.actualSize].tokenType = IDLE;
-	//Seta o nome da entrada para t%d
-	sprintf(st.entries[st.actualSize].val,"t%d",numTemp++);
+	//Seta o nome do entrada temporária para t${st.numTemp};
+	sprintf(st.entries[st.actualSize].val,"t%d",st.numTemp++);
 	st.entries[st.actualSize].valSize = strlen(st.entries[st.actualSize].val);
 	st.entries[st.actualSize].class = SEMANTIC_CLASS_TEMP;
 	st.entries[st.actualSize++].type = type;
@@ -252,5 +252,4 @@ void initSemanticParser()
 	initSemanticTypeNames();
 	initSymbolTable();
 	initAnalysisQueue();
-
 }
