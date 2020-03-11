@@ -18,7 +18,6 @@ void init()
 {
 	lines = 0;
 	col = 0;
-	consumed = 1;
 	numTemp = 0;
 
 	initTokenTypesNames();
@@ -27,6 +26,8 @@ void init()
 	initSemanticTypeNames();
 	initThreeAddressOpNames();
 
+	tokenInit();
+	token.isConsumed = 1;
 	initSymbolTable();
 	initAnalisysQueue();
 	initCode();

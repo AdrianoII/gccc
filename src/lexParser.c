@@ -19,22 +19,22 @@ tokenType token;
 
 int lines;
 int col;
-int consumed;
 char* tokenTypesNames[13];
 char* tokenClassNames[13];
 
 void tokenInit()
 {
-    memset(token.lexVal, '\0', 256);
+    memset(token.lexVal, '\0', 64);
     token.size = 0;
     token.type = IDLE;
     token.class = CLASS_ERROR;
+    token.isConsumed = 0;
 }
 
 
 void printToken()
 {
-    printf("Token{\n\tlexval: \"%s\",\n\tsize: %d,\n\ttype: %s\n}\n",token.lexVal,token.size,tokenTypesNames[token.type]);
+    printf("Token{\n\tlexval: \"%s\",\n\tsize: %d,\n\ttype: %s\n\tisConsumed: %d\n}\n",token.lexVal,token.size,tokenTypesNames[token.type],token.isConsumed);
 }
 
 void initTokenTypesNames()
@@ -181,9 +181,8 @@ int tryParseToken(char c)
 
 int getNextToken(FILE *input)
 {
-	if(consumed)
+	if(token.isConsumed)
 	{
-		consumed = 0;
 		char c = 0;
 		tokenInit();
 		while ((c = fgetc(input)) != EOF) {

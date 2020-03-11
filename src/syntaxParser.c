@@ -22,7 +22,7 @@ int I()
 	getNextToken(entrada);
 	if(token.type == VAR)
 	{
-		consumeToken();
+		token.isConsumed =  1;
 		if(D())
 		{
 			return 1;
@@ -42,7 +42,7 @@ int D()
 		getNextToken(entrada);
 		if(token.type == COLON)
 		{
-			consumeToken();
+			token.isConsumed =  1;
 			if(K())
 			{
 				if(O())
@@ -66,7 +66,7 @@ int L()
 	getNextToken(entrada);
 	if(token.type == ID)
 	{
-		consumeToken();
+		token.isConsumed =  1;
 		symbolTableItem* idRef = addSymbolTable();
 		if(idRef != NULL)
 		{
@@ -91,7 +91,7 @@ int X()
 	getNextToken(entrada);
 	if(token.type == COMMA)
 	{
-		consumeToken();
+		token.isConsumed =  1;
 		if(L())
 		{
 			return 1;
@@ -109,7 +109,7 @@ int K()
 	getNextToken(entrada);
 	if(token.type == INTEGER || token.type == REAL)
 	{
-		consumeToken();
+		token.isConsumed =  1;
 		addTypeRange();
 		return 1;
 	}
@@ -127,7 +127,7 @@ int O()
 	getNextToken(entrada);
 	if(token.type == SEMICOLON)
 	{
-		consumeToken();
+		token.isConsumed =  1;
 		if(D())
 		{
 			return 1;
@@ -149,7 +149,7 @@ int S()
 	quadType quad;
 	if(token.type == ID)
 	{
-		consumeToken();
+		token.isConsumed =  1;
 		symbolTableItem* idRef = lookup(token.lexVal);
 		if(idRef != NULL)
 		{
@@ -158,7 +158,7 @@ int S()
 			if(token.type == ASSIGNMENT)
 			{
 				e.esq = idRef;
-				consumeToken();
+				token.isConsumed =  1;
 				if(E(&e))
 				{
 					quad.operator = THREE_ADDRESS_ASSIGNMENT;
@@ -180,13 +180,13 @@ int S()
 	}
 	else if(token.type == IF)
 	{
-		consumeToken();
+		token.isConsumed =  1;
 		if(E(&e))
 		{
 			getNextToken(entrada);
 			if(token.type == THEN)
 			{
-				consumeToken();
+				token.isConsumed =  1;
 				nonTerminalType s1;
 				s1.esq = NULL;
 				s1.dir = NULL;
@@ -253,7 +253,7 @@ int T(nonTerminalType *t)
 	getNextToken(entrada);
 	if(token.type == ID)
 	{
-		consumeToken();
+		token.isConsumed =  1;
 		symbolTableItem* idRef = lookup(token.lexVal);
 		if(idRef != NULL)
 		{
@@ -286,7 +286,7 @@ int R(nonTerminalType *r)
 		t.esq = NULL;
 		t.dir = NULL;
 		t.quadAddress = -1;
-		consumeToken();
+		token.isConsumed =  1;
 		if(T(&t))
 		{
 			r1.esq = t.dir;

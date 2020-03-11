@@ -3,22 +3,22 @@
 
 #include "main.h"
 
-#define consumeToken() consumed = 1
+#define LEX_VAL_SIZE 64
 
 typedef enum{ERROR,IDLE,VAR,COLON,ID,COMMA,INTEGER,REAL,SEMICOLON,ASSIGNMENT,IF,THEN,PLUS} tokenClassification;
 typedef enum{CLASS_ERROR,CLASS_IDLE,KEYWORD,SYMBOL,OPERATOR,IDENTIFIER,TYPE} tokenClass;
 
 typedef struct tokenStruct
 {
-    char lexVal[256];
+    char lexVal[LEX_VAL_SIZE];
     int size;
     tokenClassification type;
 	tokenClass class;
+	int isConsumed;
 }tokenType;
 
 extern int lines;
 extern int col;
-extern int consumed;
 extern tokenType token;
 extern char* tokenTypesNames[13];
 extern char* tokenClassNames[13];
