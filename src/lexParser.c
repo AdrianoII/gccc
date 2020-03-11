@@ -16,8 +16,6 @@
 
 tokenType token;
 
-int lines;
-int col;
 char* tokenTypesNames[13];
 
 void initToken()
@@ -53,8 +51,8 @@ void initTokenTypesNames()
 
 void initLexParser()
 {
-	lines = 0;
-	col = 0;
+	input.line = 0;
+	input.col = 0;
 	initTokenTypesNames();
 	initToken();
 	token.isConsumed = 1;
@@ -157,30 +155,30 @@ int tryParseToken(char c)
     }
     if (c == '\n' && !parsed)
     {
-        ++lines;
-        col = 0;
+        ++input.line;
+		input.col = 0;
     }
     return parsed;
 }
 
 
-int getNextToken(FILE *input)
+int getNextToken()
 {
 	if(token.isConsumed)
 	{
 		char c = 0;
 		initToken();
-		while ((c = fgetc(input)) != EOF) {
-			++col;
-			if (lines == 0) {
-				lines = 1;
+		while ((c = fgetc(input.entrada)) != EOF) {
+			++input.col;
+			if (input.line == 0) {
+				input.line = 1;
 			}
 			if (tryParseToken(c)) {
-				fseek(input, -1, SEEK_CUR);
-				--col;
+				fseek(input.entrada, -1, SEEK_CUR);
+				--input.col;
 				if(token.type == ERROR)
 				{
-					printf(RED"ERRO LÉXICO: (%d:%d) %s NÃO É RECONHECIDO.\n"RESET, lines, col, token.lexVal);
+					printf(RED"ERRO LÉXICO: (%d:%d) %s NÃO É RECONHECIDO.\n"RESET, input.line, input.col, token.lexVal);
 				}
 				break;
 			}

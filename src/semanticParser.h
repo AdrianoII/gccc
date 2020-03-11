@@ -2,7 +2,7 @@
 #define COMPILADOR_SEMANTICPARSER_H
 
 #include "lexParser.h"
-#include "main.h"
+#include "utils.h"
 
 #define ST_VAL_SIZE 32
 

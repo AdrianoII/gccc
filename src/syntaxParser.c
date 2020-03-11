@@ -15,7 +15,7 @@ int T(nonTerminalType *t);
 
 void syntaxError(tokenClassification expected)
 {
-	printf(RED "ERRO SINTÁTICO: (%d:%d) obtido %s(%s) esperado %s\n" RESET,lines,col,token.lexVal,tokenTypesNames[token.type],tokenTypesNames[expected]);
+	printf(RED "ERRO SINTÁTICO: (%d:%d) obtido %s(%s) esperado %s\n" RESET,input.line,input.col,token.lexVal,tokenTypesNames[token.type],tokenTypesNames[expected]);
 }
 
 int startAnalysis()
@@ -36,7 +36,7 @@ int Z()
 }
 int I()
 {
-	getNextToken(entrada);
+	getNextToken(input.entrada);
 	if(token.type == VAR)
 	{
 		token.isConsumed =  1;
@@ -56,7 +56,7 @@ int D()
 {
 	if(L())
 	{
-		getNextToken(entrada);
+		getNextToken(input.entrada);
 		if(token.type == COLON)
 		{
 			token.isConsumed =  1;
@@ -80,7 +80,7 @@ int D()
 
 int L()
 {
-	getNextToken(entrada);
+	getNextToken(input.entrada);
 	if(token.type == ID)
 	{
 		token.isConsumed =  1;
@@ -94,7 +94,7 @@ int L()
 			}
 		} else
 		{
-			printf(RED"ERRO SEMÂNTICO: (%d:%d) A VÁRIAVEL %s JÁ FOI DECLARADA ANTERIORMENTE!\n"RESET,lines,col,token.lexVal);
+			printf(RED"ERRO SEMÂNTICO: (%d:%d) A VÁRIAVEL %s JÁ FOI DECLARADA ANTERIORMENTE!\n"RESET,input.line,input.col,token.lexVal);
 		}
 	} else
 	{
@@ -105,7 +105,7 @@ int L()
 
 int X()
 {
-	getNextToken(entrada);
+	getNextToken(input.entrada);
 	if(token.type == COMMA)
 	{
 		token.isConsumed =  1;
@@ -123,7 +123,7 @@ int X()
 
 int K()
 {
-	getNextToken(entrada);
+	getNextToken(input.entrada);
 	if(token.type == INTEGER || token.type == REAL)
 	{
 		token.isConsumed =  1;
@@ -141,7 +141,7 @@ int K()
 
 int O()
 {
-	getNextToken(entrada);
+	getNextToken(input.entrada);
 	if(token.type == SEMICOLON)
 	{
 		token.isConsumed =  1;
@@ -158,7 +158,7 @@ int O()
 
 int S()
 {
-	getNextToken(entrada);
+	getNextToken(input.entrada);
 	nonTerminalType e;
 	e.dir = NULL;
 	e.esq = NULL;
@@ -171,7 +171,7 @@ int S()
 		if(idRef != NULL)
 		{
 			addAnalysisQueue(idRef);
-			getNextToken(entrada);
+			getNextToken(input.entrada);
 			if(token.type == ASSIGNMENT)
 			{
 				e.esq = idRef;
@@ -192,7 +192,7 @@ int S()
 			}
 		} else
 		{
-			printf(RED"ERRO SEMÂNTICO: (%d:%d) A VÁRIAVEL %s NÃO FOI DECLARADA!\n"RESET,lines,col,token.lexVal);
+			printf(RED"ERRO SEMÂNTICO: (%d:%d) A VÁRIAVEL %s NÃO FOI DECLARADA!\n"RESET,input.line,input.col,token.lexVal);
 		}
 	}
 	else if(token.type == IF)
@@ -200,7 +200,7 @@ int S()
 		token.isConsumed =  1;
 		if(E(&e))
 		{
-			getNextToken(entrada);
+			getNextToken(input.entrada);
 			if(token.type == THEN)
 			{
 				token.isConsumed =  1;
@@ -213,7 +213,7 @@ int S()
 					quad.operator = THREE_ADDRESS_JF;
 					quad.result = NULL;
 					quad.operand1 = e.dir;
-					quad.operand2 = addSymbolTableTag(intemediateCode.actualSize);
+					quad.operand2 = addSymbolTableTag(intermediateCode.actualSize);
 					patch(s1.quadAddress,quad);
 					return 1;
 				}
@@ -240,6 +240,7 @@ int E(nonTerminalType *e)
 	t.esq = NULL;
 	t.dir = NULL;
 	t.quadAddress = -1;
+	int isIf = token.type == IF;
 	if(T(&t))
 	{
 		nonTerminalType r;
@@ -252,9 +253,14 @@ int E(nonTerminalType *e)
 			{
 				if(token.type != THEN && token.type != IDLE)
 				{
-					syntaxError(THEN);
-					printf("OR\n");
-					syntaxError(IDLE);
+					if(isIf)
+					{
+						syntaxError(THEN);
+					} else
+					{
+						syntaxError(IDLE);
+					}
+					//printf("OR\n");
 					return 0;
 				}
 			}
@@ -267,7 +273,7 @@ int E(nonTerminalType *e)
 
 int T(nonTerminalType *t)
 {
-	getNextToken(entrada);
+	getNextToken(input.entrada);
 	if(token.type == ID)
 	{
 		token.isConsumed =  1;
@@ -280,7 +286,7 @@ int T(nonTerminalType *t)
 		}
 		else
 		{
-			printf(RED"ERRO SEMÂNTICO: (%d:%d) A VÁRIAVEL %s NÃO FOI DECLARADA!\n"RESET,lines,col,token.lexVal);
+			printf(RED"ERRO SEMÂNTICO: (%d:%d) A VÁRIAVEL %s NÃO FOI DECLARADA!\n"RESET,input.line,input.col,token.lexVal);
 		}
 	}
 	else
@@ -296,7 +302,7 @@ int R(nonTerminalType *r)
 	r1.esq = NULL;
 	r1.dir = NULL;
 	r1.quadAddress = -1;
-	getNextToken(entrada);
+	getNextToken(input.entrada);
 	if(token.type == PLUS)
 	{
 		nonTerminalType t;

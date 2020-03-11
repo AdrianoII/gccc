@@ -1,7 +1,7 @@
 #ifndef COMPILADOR_LEXPARSER_H
 #define COMPILADOR_LEXPARSER_H
 
-#include "main.h"
+#include "utils.h"
 
 #define LEX_VAL_SIZE 64
 
@@ -15,8 +15,6 @@ typedef struct tokenStruct
 	int isConsumed;
 }tokenType;
 
-extern int lines;
-extern int col;
 extern tokenType token;
 extern char* tokenTypesNames[13];
 

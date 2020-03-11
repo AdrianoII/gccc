@@ -174,16 +174,16 @@ int doTypeCheck()
 			if(aux->item->type != aq.head->item->type)
 			{
 				isTypeEquals = 0;
-				printf(RED"ERRO SEMÂNTICO: (%d:%d) TIPOS DE %s(%s) E %s(%s) SÃO DIFERENTES!\n"RESET,lines,col,aq.head->item->val,semanticTypeNames[aq.head->item->type],aux->item->val,semanticTypeNames[aux->item->type]);
+				printf(RED"ERRO SEMÂNTICO: (%d:%d) TIPOS DE %s(%s) E %s(%s) SÃO DIFERENTES!\n"RESET,input.line,input.col,aq.head->item->val,semanticTypeNames[aq.head->item->type],aux->item->val,semanticTypeNames[aux->item->type]);
 				break;
 			}
 		}
 		if(isTypeEquals)
 		{
-			printf(GREEN"ANÁLISE SEMÂNTICA: (%d:%d) TIPOS SÃO IGUAIS!\n"RESET,lines,col);
+			printf(GREEN"ANÁLISE SEMÂNTICA: (%d:%d) TIPOS SÃO IGUAIS!\n"RESET,input.line,input.col);
 		}
 	}
-	else
+	else if(aq.head == NULL)
 	{
 		printf(RED"A analysis queue está vazia!\n"RESET);
 	}

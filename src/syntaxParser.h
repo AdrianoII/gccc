@@ -4,7 +4,7 @@
 #include "lexParser.h"
 #include "semanticParser.h"
 #include "intermediateCodeGeneration.h"
-#include "main.h"
+#include "utils.h"
 
 int startAnalysis();
 

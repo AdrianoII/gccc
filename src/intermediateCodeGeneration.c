@@ -4,12 +4,12 @@
 #include "intermediateCodeGeneration.h"
 
 char* threeAddressOpNames[4];
-codeType intemediateCode;
+codeType intermediateCode;
 
 void initCode()
 {
-	intemediateCode.head = NULL;
-	intemediateCode.actualSize = 0;
+	intermediateCode.head = NULL;
+	intermediateCode.actualSize = 0;
 }
 
 void initThreeAddressOpNames()
@@ -22,7 +22,7 @@ void initThreeAddressOpNames()
 
 void insertCode(char* codeLine, int pos)
 {
-	codeLineType *aux = intemediateCode.head;
+	codeLineType *aux = intermediateCode.head;
 	if(aux != NULL)
 	{
 		while(aux->line != pos && aux->prox != NULL)
@@ -49,7 +49,7 @@ void insertCode(char* codeLine, int pos)
 		strcpy(new->code,codeLine);
 		new->line = pos;
 		new->prox = NULL;
-		intemediateCode.head = new;
+		intermediateCode.head = new;
 	};
 	free(codeLine);
 }
@@ -57,7 +57,7 @@ void insertCode(char* codeLine, int pos)
 void generateCode(quadType quad)
 {
 	char* newCode = generateThreeAddresCode(quad);
-	insertCode(newCode,intemediateCode.actualSize++);
+	insertCode(newCode, intermediateCode.actualSize++);
 }
 char* generateThreeAddresCode(quadType quad)
 {
@@ -74,11 +74,11 @@ void patch(int hole,quadType fill)
 void printCode()
 {
 	printf("Label [Operador Operando1 Operando2 Resultado]\n");
-	for(codeLineType* i = intemediateCode.head; i != NULL; i = i->prox)
+	for(codeLineType* i = intermediateCode.head; i != NULL; i = i->prox)
 	{
 		printf("%d : %s\n",i->line,i->code);
 	}
-	printf("%d : [...]\n",intemediateCode.actualSize);
+	printf("%d : [...]\n", intermediateCode.actualSize);
 }
 
 int generateEmptyCodeLine()
@@ -88,7 +88,7 @@ int generateEmptyCodeLine()
 	quad.operand1 = NULL;
 	quad.operand2 = NULL;
 	quad.result =  NULL;
-	int pos = intemediateCode.actualSize;
+	int pos = intermediateCode.actualSize;
 	generateCode(quad);
 	return pos;
 }
@@ -100,10 +100,10 @@ void initIntermediateCodeGeneration()
 
 void terminateCode()
 {
-	codeLineType *atual = intemediateCode.head;
+	codeLineType *atual = intermediateCode.head;
 	if(atual != NULL)
 	{
-		codeLineType *prox = intemediateCode.head->prox;
+		codeLineType *prox = intermediateCode.head->prox;
 		if(prox != NULL)
 		{
 			while(prox != NULL)
@@ -120,4 +120,13 @@ void terminateCode()
 void terminateIntermediateCodeGeneration()
 {
 	terminateCode();
+}
+void printCodeFile(FILE *out)
+{
+	fprintf(out,"Label [Operador Operando1 Operando2 Resultado]\n");
+	for(codeLineType* i = intermediateCode.head; i != NULL; i = i->prox)
+	{
+		fprintf(out,"%d : %s\n",i->line,i->code);
+	}
+	fprintf(out, "%d : [...]\n", intermediateCode.actualSize);
 }

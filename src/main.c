@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "main.h"
+#include "utils.h"
 #include "lexParser.h"
 #include "syntaxParser.h"
 #include "semanticParser.h"
@@ -12,7 +12,7 @@
  * arg[1] = path do arquivo de entrada
  * */
 
-FILE *entrada;
+inputType input;
 
 void init()
 {
@@ -33,27 +33,40 @@ int main(int argc, char *argv[])
 {
     if(argc >= 2)
     {
-        entrada = fopen(argv[1],"r");
-        if(entrada == NULL)
+        input.entrada = fopen(argv[1],"r");
+        if(input.entrada == NULL)
         {
-            printf("Path inválido tente novamente!\n");
+            printf("Path do arquivo de entrada inválido tente novamente!\n");
             return 2;
         }
-        printf("O path inserido é %s\n",argv[1]);
+        printf("O path inserido para a entrada é %s\n",argv[1]);
         init();
 		if(startAnalysis())
 		{
-			printf("Parabéns seu programa é aceito pela gramática!\n");
-			printCode();
+			printf("Parabéns seu programa é válido!\n");
 			for(int i = 0; i < argc; i++)
 			{
 				if(!strcmp(argv[i],"-st"))
 				{
 					printSymbolTable();
 				}
+				if(!strcmp(argv[i],"-c"))
+				{
+					printCode();
+				}
+				if(!strcmp(argv[i],"-cf"))
+				{
+					FILE *output = fopen(argv[++i],"w");
+					if(input.entrada == NULL)
+					{
+						printf("Path de sáida inválido tente novamente!\n");
+						return 2;
+					}
+					printCodeFile(output);
+				}
 			}
 		}
-        fclose(entrada);
+        fclose(input.entrada);
 		terminate();
     }
     else

@@ -7,6 +7,12 @@
 #define RESET   "\033[0m"
 #include <stdio.h>
 
-extern FILE *entrada;
+typedef struct{
+	FILE *entrada;
+	int line;
+	int col;
+}inputType;
+
+extern inputType input;
 
 #endif //COMPILADOR_MAIN_H

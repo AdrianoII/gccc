@@ -17,7 +17,7 @@ typedef struct
 
 typedef struct codeLineStruct
 {
-	char code[256];
+	char code[CODE_SIZE];
 	int line;
 	struct codeLineStruct* prox;
 } codeLineType;
@@ -36,7 +36,7 @@ typedef struct
 }nonTerminalType;
 
 extern char* threeAddressOpNames[4];
-extern codeType intemediateCode;
+extern codeType intermediateCode;
 
 void initCode();
 void initThreeAddressOpNames();
@@ -47,5 +47,6 @@ void patch(int hole,quadType fill);
 void printCode();
 void initIntermediateCodeGeneration();
 void terminateIntermediateCodeGeneration();
+void printCodeFile(FILE *out);
 
 #endif //COMPILADOR_INTERMEDIATECODEGENERATION_H
