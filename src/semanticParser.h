@@ -14,7 +14,6 @@ typedef struct
 	char lexVal[256];
 	int lexValSize;
 	tokenClassification tokenType;
-	tokenClass tokenClass;
 	semanticClass class;
 	semanticType type;
 }symbolTableItem;

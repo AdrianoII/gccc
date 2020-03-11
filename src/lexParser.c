@@ -20,14 +20,12 @@ tokenType token;
 int lines;
 int col;
 char* tokenTypesNames[13];
-char* tokenClassNames[13];
 
 void tokenInit()
 {
     memset(token.lexVal, '\0', 64);
     token.size = 0;
     token.type = IDLE;
-    token.class = CLASS_ERROR;
     token.isConsumed = 0;
 }
 
@@ -53,15 +51,6 @@ void initTokenTypesNames()
 	tokenTypesNames[11] = "then";
 	tokenTypesNames[12] = "plus";
 }
-void initTokenClassNames()
-{
-	tokenClassNames[0] = "KEYWORD";
-	tokenClassNames[1] = "CLASS_IDLE";
-	tokenClassNames[2] = "SYMBOL";
-	tokenClassNames[3] = "OPERATOR";
-	tokenClassNames[4] = "IDENTIFIER";
-	tokenClassNames[5] = "TYPE";
-}
 
 int isIdentifier()
 {
@@ -86,61 +75,49 @@ void classifyToken()
     if(!strcmp(token.lexVal,"var"))
     {
         token.type = VAR;
-        token.class = KEYWORD;
     }
     else if(!strcmp(token.lexVal,":"))
     {
         token.type = COLON;
-        token.class = SYMBOL;
     }
     else if(!strcmp(token.lexVal,","))
     {
         token.type = COMMA;
-		token.class = SYMBOL;
     }
     else if(!strcmp(token.lexVal,"integer"))
     {
         token.type = INTEGER;
-		token.class = TYPE;
     }
     else if(!strcmp(token.lexVal,"real"))
     {
         token.type = REAL;
-		token.class = TYPE;
     }
     else if(!strcmp(token.lexVal,";"))
     {
         token.type = SEMICOLON;
-		token.class = SYMBOL;
     }
     else if(!strcmp(token.lexVal,":="))
     {
         token.type = ASSIGNMENT;
-		token.class = OPERATOR;
     }
     else if(!strcmp(token.lexVal,"if"))
     {
         token.type = IF;
-		token.class = KEYWORD;
     }
     else if(!strcmp(token.lexVal,"then"))
     {
         token.type = THEN;
-		token.class = KEYWORD;
     }
     else if(!strcmp(token.lexVal,"+"))
     {
         token.type = PLUS;
-		token.class = OPERATOR;
     }
     else if(isIdentifier())
     {
         token.type = ID;
-		token.class = IDENTIFIER;
     }else
 	{
     	token.type = ERROR;
-		token.class = CLASS_ERROR;
     }
 }
 

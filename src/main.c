@@ -21,7 +21,6 @@ void init()
 	numTemp = 0;
 
 	initTokenTypesNames();
-	initTokenClassNames();
 	initSemanticClassNames();
 	initSemanticTypeNames();
 	initThreeAddressOpNames();

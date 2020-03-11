@@ -38,8 +38,8 @@ void printSymbolTable()
 	if(st.acutalSize > 0)
 	{
 		for (int i = 0; i < st.acutalSize; i++) {
-			printf("\n\t {\n\t\tlexVal: %s,\n\t\tlexValSize: %d,\n\t\ttokenClass: %s,\n\t\ttokenType: %s,\n\t\tclass: %s,\n\t\ttype: %s,\n\t }",
-				   st.entries[i].lexVal, st.entries[i].lexValSize, tokenClassNames[st.entries[i].tokenClass],
+			printf("\n\t {\n\t\tlexVal: %s,\n\t\tlexValSize: %d,\n\t\ttokenType: %s,\n\t\tclass: %s,\n\t\ttype: %s,\n\t }",
+				   st.entries[i].lexVal, st.entries[i].lexValSize,
 				   tokenTypesNames[st.entries[i].tokenType], semanticClassNames[st.entries[i].class],
 				   semanticTypeNames[st.entries[i].type]);
 		}
@@ -54,9 +54,9 @@ void printAnalisysQueue()
 	{
 		for (analisysQueueItem *aux = aq.head; aux != NULL; aux = aux->prox)
 		{
-			printf("\n\t {\n\t\tlexVal: %s,\n\t\tlexValSize: %d,\n\t\ttokenClass: %s,\n\t\ttokenType: %s,\n\t\tclass: %s,\n\t\ttype: %s,\n\t }",
-				   aux->item->lexVal, aux->item->lexValSize, tokenClassNames[aux->item->tokenClass], tokenTypesNames[aux->item->tokenType],
-				   tokenClassNames[aux->item->tokenType], semanticTypeNames[aux->item->class]);
+			printf("\n\t {\n\t\tlexVal: %s,\n\t\tlexValSize: %d,\n\t\ttokenType: %s,\n\t\tclass: %s,\n\t\ttype: %s,\n\t }",
+				   aux->item->lexVal, aux->item->lexValSize, tokenTypesNames[aux->item->tokenType],
+				   semanticClassNames[aux->item->tokenType], semanticTypeNames[aux->item->class]);
 		}
 	}
 	printf("\n\t]\n}\n");
@@ -85,7 +85,6 @@ symbolTableItem* addSymbolTable()
 			}
 		}
 		result = &st.entries[st.acutalSize];
-		st.entries[st.acutalSize].tokenClass = token.class;
 		st.entries[st.acutalSize].tokenType = token.type;
 		strcpy(st.entries[st.acutalSize].lexVal, token.lexVal);
 		st.entries[st.acutalSize].lexValSize = token.size;
@@ -219,7 +218,6 @@ symbolTableItem* addSymbolTableTag(int tagVal)
 			}
 		}
 		result = &st.entries[st.acutalSize];
-		st.entries[st.acutalSize].tokenClass = CLASS_IDLE;
 		st.entries[st.acutalSize].tokenType = IDLE;
 		strcpy(st.entries[st.acutalSize].lexVal,aux);
 		st.entries[st.acutalSize].lexValSize = strlen(st.entries[st.acutalSize].lexVal);
@@ -239,7 +237,6 @@ symbolTableItem* addTempSymbolTable(semanticType type)
 		}
 	}
 	symbolTableItem* result = &st.entries[st.acutalSize];
-	st.entries[st.acutalSize].tokenClass = CLASS_IDLE;
 	st.entries[st.acutalSize].tokenType = IDLE;
 	//Seta o nome da entrada para t%d
 	sprintf(st.entries[st.acutalSize].lexVal,"t%d",numTemp++);
