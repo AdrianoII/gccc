@@ -12,8 +12,7 @@ void initSymbolTable()
 {
 	st.actualSize = 0;
 	st.numTemp = 0;
-	st.maxSize = ST_INITIAL_SIZE;
-	st.entries = malloc(sizeof(symbolTableItem) * ST_INITIAL_SIZE);
+	st.head = NULL;
 }
 
 void initSemanticClassNames()
@@ -34,14 +33,15 @@ void initSemanticTypeNames()
 
 void printSymbolTable()
 {
-	printf("symbolTable{\n\tactualSize: %d,\n\tmaxSize: %d,\n\tentries: [",st.actualSize,st.maxSize);
+	printf("symbolTable{\n\tactualSize: %d,\n\tnumTemp: %d,\n\tentries: [",st.actualSize,st.numTemp);
 	if(st.actualSize > 0)
 	{
-		for (int i = 0; i < st.actualSize; i++) {
+		for (symbolTableItem *i = st.head; i != NULL; i = i->prox)
+		{
 			printf("\n\t {\n\t\tlexVal: %s,\n\t\tlexValSize: %d,\n\t\ttokenType: %s,\n\t\tclass: %s,\n\t\ttype: %s,\n\t }",
-				   st.entries[i].val, st.entries[i].valSize,
-				   tokenTypesNames[st.entries[i].tokenType], semanticClassNames[st.entries[i].class],
-				   semanticTypeNames[st.entries[i].type]);
+				   i->val, i->valSize,
+				   tokenTypesNames[i->tokenType], semanticClassNames[i->class],
+				   semanticTypeNames[i->type]);
 		}
 	}
 	printf("\n\t]\n}\n");
@@ -62,36 +62,29 @@ void printAnalysisQueue()
 	printf("\n\t]\n}\n");
 }
 
-int reallocSymbolTable()
-{
-	printf("oi\n");
-	if(realloc(st.entries,st.maxSize + ST_INITIAL_SIZE) == NULL)
-	{
-		printf(RED"Não foi possível alocar mais memória para tabela de símbolos ¯\\_(ツ)_/¯"RESET);
-		return 0;
-	}
-	st.maxSize += ST_INITIAL_SIZE;
-	return 1;
-}
-
 symbolTableItem* addSymbolTable()
 {
-	symbolTableItem *result = NULL;
-	if(lookup(token.lexVal) == NULL)
+	symbolTableItem *new = NULL;
+	if(lookup(token.lexVal, SEMANTIC_CLASS_VAR) == NULL)
 	{
-		if (st.actualSize == st.maxSize) {
-			if (!reallocSymbolTable()) {
-				return NULL;
-			}
+		new = calloc(1,sizeof(symbolTableItem));
+		new->tokenType = token.type;
+		strcpy(new->val, token.lexVal);
+		new->valSize = token.size;
+		new->class = SEMANTIC_CLASS_VAR;
+		new->type = SEMANTIC_TYPE_EMPTY;
+		if(st.head == NULL)
+		{
+			st.head = new;
+		} else
+		{
+			symbolTableItem *aux = NULL;
+			for(aux = st.head; aux->prox != NULL; aux = aux->prox);
+			aux->prox = new;
 		}
-		result = &st.entries[st.actualSize];
-		st.entries[st.actualSize].tokenType = token.type;
-		strcpy(st.entries[st.actualSize].val, token.lexVal);
-		st.entries[st.actualSize].valSize = token.size;
-		st.entries[st.actualSize].class = SEMANTIC_CLASS_VAR;
-		st.entries[st.actualSize++].type = SEMANTIC_TYPE_EMPTY;
+		++st.actualSize;
 	}
-	return result;
+	return new;
 }
 
 void initAnalysisQueue()
@@ -130,15 +123,18 @@ void addTypeRange()
 	cleanAnalysisQueue();
 }
 
-symbolTableItem* lookup(char *lexVal)
+symbolTableItem* lookup(char *lexVal,semanticClass class)
 {
 	symbolTableItem* result = NULL;
-	for(int i = 0; i < st.actualSize; i++)
+	if(st.actualSize > 0)
 	{
-		if((!strcmp(lexVal,st.entries[i].val)) && st.entries[i].class == SEMANTIC_CLASS_VAR)
+		for (symbolTableItem *aux = st.head; aux != NULL; aux = aux->prox)
 		{
-			result = &st.entries[i];
-			break;
+			if((!strcmp(lexVal,aux->val)) && aux->class == class)
+			{
+				result = aux;
+				break;
+			}
 		}
 	}
 	return result;
@@ -205,45 +201,53 @@ int doTypeCoercion()
 
 symbolTableItem* addSymbolTableTag(int tagVal)
 {
-	char aux[32];
+	char aux[ST_VAL_SIZE];
 	sprintf(aux,"%d",tagVal);
-	symbolTableItem *result = lookup(aux);
+	symbolTableItem *result = lookup(aux, SEMANTIC_CLASS_TAG);
+	symbolTableItem *new = NULL;
 	if(result == NULL)
 	{
-		if (st.actualSize == st.maxSize)
+		new = calloc(1,sizeof(symbolTableItem));
+		new->tokenType = IDLE;
+		strcpy(new->val,aux);
+		new->valSize = strlen(new->val);
+		new->class = SEMANTIC_CLASS_TAG;
+		new->type = SEMANTIC_TYPE_ADDRESS;
+		if(st.head == NULL)
 		{
-			if (!reallocSymbolTable())
-			{
-				return NULL;
-			}
+			st.head = new;
+		} else
+		{
+			symbolTableItem *aux = NULL;
+			for(aux = st.head; aux->prox != NULL; aux = aux->prox);
+			aux->prox = new;
 		}
-		result = &st.entries[st.actualSize];
-		st.entries[st.actualSize].tokenType = IDLE;
-		strcpy(st.entries[st.actualSize].val,aux);
-		st.entries[st.actualSize].valSize = strlen(st.entries[st.actualSize].val);
-		st.entries[st.actualSize].class = SEMANTIC_CLASS_TAG;
-		st.entries[st.actualSize++].type = SEMANTIC_TYPE_ADDRESS;
+		++st.actualSize;
 	}
-	return result;
+	return new;
 }
 
 symbolTableItem* addTempSymbolTable(semanticType type)
 {
-	if (st.actualSize == st.maxSize)
+	symbolTableItem *new = NULL;
+	new = calloc(1,sizeof(symbolTableItem));
+	new->tokenType = IDLE;
+	//Seta o nome do entrada temporária para t${st.numTemp}
+	sprintf(new->val,"t%d",st.numTemp++);
+	new->valSize = strlen(new->val);
+	new->class = SEMANTIC_CLASS_TEMP;
+	new->type = type;
+	if(st.head == NULL)
 	{
-		if (!reallocSymbolTable())
-		{
-			return NULL;
-		}
+		st.head = new;
+	} else
+	{
+		symbolTableItem *aux = NULL;
+		for(aux = st.head; aux->prox != NULL; aux = aux->prox);
+		aux->prox = new;
 	}
-	symbolTableItem* result = &st.entries[st.actualSize];
-	st.entries[st.actualSize].tokenType = IDLE;
-	//Seta o nome do entrada temporária para t${st.numTemp};
-	sprintf(st.entries[st.actualSize].val,"t%d",st.numTemp++);
-	st.entries[st.actualSize].valSize = strlen(st.entries[st.actualSize].val);
-	st.entries[st.actualSize].class = SEMANTIC_CLASS_TEMP;
-	st.entries[st.actualSize++].type = type;
-	return result;
+	++st.actualSize;
+	return new;
 }
 
 void initSemanticParser()
@@ -252,4 +256,47 @@ void initSemanticParser()
 	initSemanticTypeNames();
 	initSymbolTable();
 	initAnalysisQueue();
+}
+
+void terminateSymbolTable()
+{
+	symbolTableItem *atual = st.head;
+	if(atual != NULL)
+	{
+		symbolTableItem *prox = st.head->prox;
+		if(prox != NULL)
+		{
+			while(prox != NULL)
+			{
+				free(atual);
+				atual = prox;
+				prox = prox->prox;
+			}
+		}
+	}
+	free(atual);
+}
+
+void terminateAnalysisQueue()
+{
+	analysisQueueItem *atual = aq.head;
+	if(atual != NULL)
+	{
+		analysisQueueItem *prox = aq.head->prox;
+		if(prox != NULL)
+		{
+			while(prox != NULL)
+			{
+				free(atual);
+				atual = prox;
+				prox = prox->prox;
+			}
+		}
+	}
+	free(atual);
+}
+void terminateSemanticParser()
+{
+	terminateSymbolTable();
+	terminateAnalysisQueue();
 }

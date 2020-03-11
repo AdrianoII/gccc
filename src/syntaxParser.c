@@ -167,7 +167,7 @@ int S()
 	if(token.type == ID)
 	{
 		token.isConsumed =  1;
-		symbolTableItem* idRef = lookup(token.lexVal);
+		symbolTableItem* idRef = lookup(token.lexVal, SEMANTIC_CLASS_VAR);
 		if(idRef != NULL)
 		{
 			addAnalysisQueue(idRef);
@@ -271,7 +271,7 @@ int T(nonTerminalType *t)
 	if(token.type == ID)
 	{
 		token.isConsumed =  1;
-		symbolTableItem* idRef = lookup(token.lexVal);
+		symbolTableItem* idRef = lookup(token.lexVal, SEMANTIC_CLASS_VAR);
 		if(idRef != NULL)
 		{
 			addAnalysisQueue(idRef);

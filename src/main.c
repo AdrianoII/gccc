@@ -25,6 +25,10 @@ void init()
 	initCode();
 }
 
+void terminate()
+{
+	terminateSemanticParser();
+}
 
 int main(int argc, char *argv[])
 {
@@ -56,7 +60,7 @@ int main(int argc, char *argv[])
 			free(code.code[i]);
 		}
     	free(code.code);
-    	free(st.entries);
+		terminate();
     }
     else
     {
