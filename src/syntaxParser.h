@@ -6,17 +6,7 @@
 #include "intermediateCodeGeneration.h"
 #include "main.h"
 
-int Z();
-int I();
-int D();
-int L();
-int X();
-int K();
-int O();
-int S();
-int E(nonTerminalType *e);
-int R(nonTerminalType *r);
-int T(nonTerminalType *t);
+int startAnalysis();
 
 void syntaxError(tokenClassification expected);
 

@@ -19,12 +19,10 @@ extern int lines;
 extern int col;
 extern tokenType token;
 extern char* tokenTypesNames[13];
-extern char* tokenClassNames[13];
 
 
-void initTokenTypesNames();
+void initLexParser();
 void printToken();
-int isIdentifier();
-void tokenInit();
 int getNextToken();
+
 #endif //COMPILADOR_LEXPARSER_H

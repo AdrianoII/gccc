@@ -16,19 +16,14 @@ FILE *entrada;
 
 void init()
 {
-	lines = 0;
-	col = 0;
 	numTemp = 0;
 
-	initTokenTypesNames();
-	initSemanticClassNames();
-	initSemanticTypeNames();
+	initLexParser();
+
+	initSemanticParser();
+
 	initThreeAddressOpNames();
 
-	tokenInit();
-	token.isConsumed = 1;
-	initSymbolTable();
-	initAnalisysQueue();
 	initCode();
 }
 
@@ -45,7 +40,7 @@ int main(int argc, char *argv[])
         }
         printf("O path inserido é %s\n",argv[1]);
         init();
-		if(Z())
+		if(startAnalysis())
 		{
 			printf("Parabéns seu programa é aceito pela gramática!\n");
 			printCode();

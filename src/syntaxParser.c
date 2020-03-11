@@ -1,9 +1,26 @@
 #include "syntaxParser.h"
 #include <stdio.h>
 
+int Z();
+int I();
+int D();
+int L();
+int X();
+int K();
+int O();
+int S();
+int E(nonTerminalType *e);
+int R(nonTerminalType *r);
+int T(nonTerminalType *t);
+
 void syntaxError(tokenClassification expected)
 {
 	printf(RED "ERRO SINTÁTICO: (%d:%d) obtido %s(%s) esperado %s\n" RESET,lines,col,token.lexVal,tokenTypesNames[token.type],tokenTypesNames[expected]);
+}
+
+int startAnalysis()
+{
+	return Z();
 }
 
 int Z()
@@ -70,7 +87,7 @@ int L()
 		symbolTableItem* idRef = addSymbolTable();
 		if(idRef != NULL)
 		{
-			addAnalisysQueue(idRef);
+			addAnalysisQueue(idRef);
 			if(X())
 			{
 				return 1;
@@ -153,7 +170,7 @@ int S()
 		symbolTableItem* idRef = lookup(token.lexVal);
 		if(idRef != NULL)
 		{
-			addAnalisysQueue(idRef);
+			addAnalysisQueue(idRef);
 			getNextToken(entrada);
 			if(token.type == ASSIGNMENT)
 			{
@@ -257,7 +274,7 @@ int T(nonTerminalType *t)
 		symbolTableItem* idRef = lookup(token.lexVal);
 		if(idRef != NULL)
 		{
-			addAnalisysQueue(idRef);
+			addAnalysisQueue(idRef);
 			(*t).dir = idRef;
 			return  1;
 		}

@@ -49,7 +49,7 @@ void generateCode(quadType quad)
 char* generateThreeAddresCode(quadType quad)
 {
 	char* result = calloc(32,sizeof(char));
-	sprintf(result, "[%s %s %s %s]", threeAddressOpNames[quad.operator], (quad.operand1 == NULL ? "-" : quad.operand1->lexVal), (quad.operand2 == NULL ? "-" : quad.operand2->lexVal), (quad.result == NULL ? "-" : quad.result->lexVal));
+	sprintf(result, "[%s %s %s %s]", threeAddressOpNames[quad.operator], (quad.operand1 == NULL ? "-" : quad.operand1->val), (quad.operand2 == NULL ? "-" : quad.operand2->val), (quad.result == NULL ? "-" : quad.result->val));
 	return result;
 }
 

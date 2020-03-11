@@ -4,6 +4,7 @@
 #include "lexParser.h"
 #include "main.h"
 
+#define ST_VAL_SIZE 256
 #define ST_INITIAL_SIZE 300
 
 typedef enum {SEMANTIC_CLASS_EMPTY,SEMANTIC_CLASS_VAR,SEMANTIC_CLASS_TEMP,SEMANTIC_CLASS_TAG} semanticClass;
@@ -11,8 +12,8 @@ typedef enum {SEMANTIC_TYPE_EMPTY,SEMANTIC_TYPE_INTEGER,SEMANTIC_TYPE_REAL,SEMAN
 
 typedef struct
 {
-	char lexVal[256];
-	int lexValSize;
+	char val[ST_VAL_SIZE];
+	int valSize;
 	tokenClassification tokenType;
 	semanticClass class;
 	semanticType type;
@@ -21,42 +22,38 @@ typedef struct
 typedef struct
 {
 	symbolTableItem *entries;
-	int acutalSize;
+	int actualSize;
 	int maxSize;
 }symbolTable;
 
-typedef struct analisysQueueItem
+typedef struct analysisQueueItem
 {
 	symbolTableItem *item;
-	struct analisysQueueItem *prox;
-} analisysQueueItem;
+	struct analysisQueueItem *prox;
+} analysisQueueItem;
 
 typedef struct
 {
-	analisysQueueItem *head;
+	analysisQueueItem *head;
 	int size;
-} analisysQueue;
+} analysisQueue;
 
 extern symbolTable st;
-extern analisysQueue aq;
+extern analysisQueue aq;
 extern char* semanticClassNames[4];
 extern char* semanticTypeNames[4];
 extern int numTemp;
 
-void initSemanticClassNames();
-void initSemanticTypeNames();
-void initSymbolTable();
-void initAnalisysQueue();
+void initSemanticParser();
 void printSymbolTable();
-void printAnalisysQueue();
+void printAnalysisQueue();
 int reallocSymbolTable();
 symbolTableItem* addSymbolTable();
 symbolTableItem* addSymbolTableTag(int tagVal);
 symbolTableItem* addTempSymbolTable(semanticType type);
 void addTypeRange();
 symbolTableItem* lookup(char* lexVal);
-void addAnalisysQueue(symbolTableItem *item);
-void cleanAnalisysQueue();
+void addAnalysisQueue(symbolTableItem *item);
 int doTypeCoercion();
 
 #endif //COMPILADOR_SEMANTICPARSER_H

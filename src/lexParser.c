@@ -1,5 +1,4 @@
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
 #include "lexParser.h"
 
@@ -21,7 +20,7 @@ int lines;
 int col;
 char* tokenTypesNames[13];
 
-void tokenInit()
+void initToken()
 {
     memset(token.lexVal, '\0', 64);
     token.size = 0;
@@ -50,6 +49,15 @@ void initTokenTypesNames()
 	tokenTypesNames[10] = "if";
 	tokenTypesNames[11] = "then";
 	tokenTypesNames[12] = "plus";
+}
+
+void initLexParser()
+{
+	lines = 0;
+	col = 0;
+	initTokenTypesNames();
+	initToken();
+	token.isConsumed = 1;
 }
 
 int isIdentifier()
@@ -161,7 +169,7 @@ int getNextToken(FILE *input)
 	if(token.isConsumed)
 	{
 		char c = 0;
-		tokenInit();
+		initToken();
 		while ((c = fgetc(input)) != EOF) {
 			++col;
 			if (lines == 0) {
