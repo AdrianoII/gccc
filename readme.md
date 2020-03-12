@@ -1,8 +1,26 @@
 #  GCCC
 
-O G Curvaceous Cuiabano Compiler é um compilador para linguagem G, que foi feito para a disciplina de compiladores I.
+O G Curvaceous C Compiler é um compilador feito em C para linguagem G, que foi feito para a disciplina de compiladores I.
 
-### G:
+### Como usar:
+
+Utilize o make na raiz do projeto para compilar o mesmo, após a compilação se deve executar o seguinte aquivo obj/gccc.o, como por exemplo:
+
+```bash
+$ make
+$ ./obj/gccc.c input.txt -c
+```
+
+#### Argumentos de linha de comando:
+
+|           argumento            |                            função                            |                 exemplo                  |
+| :----------------------------: | :----------------------------------------------------------: | :--------------------------------------: |
+| path do input<br>(Obrigatório) |           Path para abrir o arquivo<br>de entrada            |      bash $ ./obj/gccc.o input.txt       |
+|              -st               | Imprimir no terminal o<br>conteúdo da tabela de<br>símbolos caso o<br>programa seja aceito |        ./obj/gccc.o input.txt -st        |
+|               -c               | Imprimir no terminal o<br>código de 3 endereços<br>a ser gerado caso<br>o programa seja aceito |        ./obj/gccc.o input.txt -c         |
+|              -cf               | Nome do arquivo(path)<br>que irá ser criado<br>contendo o código de 3<br>endereços a ser gerado<br>caso programa seja aceito | ./obj/gccc.o input.txt -cf<br>output.txt |
+
+### A linguagem G:
 
 A gramática G possui a seguinte definição:
 
