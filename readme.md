@@ -15,7 +15,7 @@ $ ./obj/gccc.c input.txt -c
 
 |           argumento            |                            função                            |                 exemplo                  |
 | :----------------------------: | :----------------------------------------------------------: | :--------------------------------------: |
-| path do input<br>(Obrigatório) |           Path para abrir o arquivo<br>de entrada            |      bash $ ./obj/gccc.o input.txt       |
+| path do input<br>(Obrigatório) |           Path para abrir o arquivo<br>de entrada            |          ./obj/gccc.o input.txt          |
 |              -st               | Imprimir no terminal o<br>conteúdo da tabela de<br>símbolos caso o<br>programa seja aceito |        ./obj/gccc.o input.txt -st        |
 |               -c               | Imprimir no terminal o<br>código de 3 endereços<br>a ser gerado caso<br>o programa seja aceito |        ./obj/gccc.o input.txt -c         |
 |              -cf               | Nome do arquivo(path)<br>que irá ser criado<br>contendo o código de 3<br>endereços a ser gerado<br>caso programa seja aceito | ./obj/gccc.o input.txt -cf<br>output.txt |
