@@ -39,7 +39,7 @@ int main(int argc, char *argv[])
             printf("Path do arquivo de entrada inválido tente novamente!\n");
             return 2;
         }
-        printf("O path inserido para a entrada é %s\n",argv[1]);
+        //printf("O path inserido para a entrada é %s\n",argv[1]);
         init();
 		if(startAnalysis())
 		{
